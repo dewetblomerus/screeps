@@ -7,14 +7,14 @@ var creepCounter = {
       return creep.memory.role == unitRole && creep.ticksToLive > 12;
     }).length;
 
-    console.log(`Filtered Creeps: ${filteredCreeps}`);
-    return Object.keys(Game.creeps).length;
+    return filteredCreeps;
   }
 };
 
 var creepSpawner = {
-  targetNumber: 3,
+  targetNumber: 4,
   run: function() {
+    console.log(`Harvester Count: ${creepCounter.run('harvester')}`);
     if (creepCounter.run('harvester') < this.targetNumber) {
       console.log(`we have less than ${this.targetNumber} creeps`);
       const result = Game.spawns['Spawn1'].spawnCreep(
@@ -30,7 +30,7 @@ var creepSpawner = {
         console.log('Spawn error: ' + result);
       }
     } else {
-      console.log('we have more than one screep');
+      console.log('we have more than one creep');
     }
   }
 };
