@@ -4,6 +4,13 @@ var roleBuilder = require('role.builder');
 var creepSpawner = require('creep.spawner');
 
 module.exports.loop = function() {
+  for (var name in Memory.creeps) {
+    if (!Game.creeps[name]) {
+      delete Memory.creeps[name];
+      console.log('Clearing non-existing creep memory:', name);
+    }
+  }
+
   creepSpawner.run();
 
   for (var name in Game.creeps) {

@@ -19,7 +19,7 @@ var creepSpawner = {
       console.log(`we have less than ${this.targetNumber} creeps`);
       const result = Game.spawns['Spawn1'].spawnCreep(
         [WORK, CARRY, MOVE],
-        `Creep ${Math.floor(Math.random() * 1000 + 1)}`,
+        `${this.creepRole} ${Game.time}`,
         {
           memory: { role: this.creepRole }
         }
