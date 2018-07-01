@@ -2,7 +2,6 @@ var _ = require('lodash');
 
 var creepCounter = {
   run: function(unitRole) {
-    console.log(`Total Creeps: ${Object.keys(Game.creeps).length}`);
     var filteredCreeps = _.filter(Game.creeps, function(creep) {
       return creep.memory.role == unitRole && creep.ticksToLive > 12;
     }).length;
@@ -13,9 +12,9 @@ var creepCounter = {
 
 var creepSpawner = {
   targetNumber: 7,
-  creepRole: 'harvester',
+  creepRole: 'upgrader',
   run: function() {
-    console.log(`Upgrader Count: ${creepCounter.run(this.creepRole)}`);
+    console.log(`${this.creepRole} Count: ${creepCounter.run(this.creepRole)}`);
     if (creepCounter.run(this.creepRole) < this.targetNumber) {
       console.log(`we have less than ${this.targetNumber} creeps`);
       const result = Game.spawns['Spawn1'].spawnCreep(
@@ -31,7 +30,7 @@ var creepSpawner = {
         console.log('Spawn error: ' + result);
       }
     } else {
-      console.log(`We have enough creeps`);
+      console.log(`We have enough ${this.creepRole}s`);
     }
   }
 };
