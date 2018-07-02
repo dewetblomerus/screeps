@@ -1,46 +1,51 @@
 const _ = require('lodash');
 
 const targetState = {
-  harvester: 3,
-  upgrader: 4,
-  builder: 2
+  harvester: 4,
+  upgrader: 5,
+  builder: 0
 };
 
-var creepCounter = {
-  run: function(unitRole) {
-    var filteredCreeps = _.filter(Game.creeps, function(creep) {
-      return creep.memory.role == unitRole && creep.ticksToLive > 12;
-    }).length;
+const countCreeps = role => {
+  var filteredCreeps = _.filter(Game.creeps, function(creep) {
+    return creep.memory.role == role && creep.ticksToLive > 12;
+  }).length;
 
-    return filteredCreeps;
-  }
+  return filteredCreeps;
 };
 
-var creepSpawner = {
-  run: function() {
+const logStuff = () => {
+  console.log('from logStuff');
+};
+
+const creepSpawner = {
+  run() {
+    logStuff();
     for (const role in targetState) {
       const targetNumber = targetState[role];
       this.matchTarget(role, targetNumber);
     }
   },
 
-  matchTarget: function(creepRole, targetNumber) {
-    if (creepCounter.run(creepRole) < targetNumber) {
-      console.log(
-        `${creepCounter.run(creepRole)} of ${targetNumber} ${creepRole}s`
-      );
-      const result = Game.spawns['Spawn1'].spawnCreep(
-        [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE],
-        `${creepRole} ${Game.time}`,
-        {
-          memory: { role: creepRole }
-        }
-      );
-      if (_.isString(result)) {
-        console.log('The name is: ' + result);
-      } else {
-        console.log('Spawn error: ' + result);
+  spawnCreepWithRole(role) {
+    const result = Game.spawns['Spawn1'].spawnCreep(
+      [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE],
+      `${role} ${Game.time}`,
+      {
+        memory: { role: role }
       }
+    );
+    if (_.isString(result)) {
+      console.log('The name is: ' + result);
+    } else {
+      console.log('Spawn error: ' + result);
+    }
+  },
+
+  matchTarget(role, targetNumber) {
+    if (countCreeps(role) < targetNumber) {
+      console.log(`${countCreeps(role)} of ${targetNumber} ${role}s`);
+      this.spawnCreepWithRole(role);
     } else {
       // console.log(`We have enough ${creepRole}s`);
     }
