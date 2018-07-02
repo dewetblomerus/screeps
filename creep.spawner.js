@@ -14,40 +14,33 @@ const countCreeps = role => {
   return filteredCreeps;
 };
 
-const logStuff = () => {
-  console.log('from logStuff');
+const spawnCreepWithRole = role => {
+  const result = Game.spawns['Spawn1'].spawnCreep(
+    [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE],
+    `${role} ${Game.time}`,
+    {
+      memory: { role: role }
+    }
+  );
+  if (_.isString(result)) {
+    console.log('The name is: ' + result);
+  } else {
+    console.log('Spawn error: ' + result);
+  }
+};
+
+const matchTarget = (role, targetNumber) => {
+  if (countCreeps(role) < targetNumber) {
+    console.log(`${countCreeps(role)} of ${targetNumber} ${role}s`);
+    spawnCreepWithRole(role);
+  }
 };
 
 const creepSpawner = {
   run() {
-    logStuff();
     for (const role in targetState) {
       const targetNumber = targetState[role];
-      this.matchTarget(role, targetNumber);
-    }
-  },
-
-  spawnCreepWithRole(role) {
-    const result = Game.spawns['Spawn1'].spawnCreep(
-      [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE],
-      `${role} ${Game.time}`,
-      {
-        memory: { role: role }
-      }
-    );
-    if (_.isString(result)) {
-      console.log('The name is: ' + result);
-    } else {
-      console.log('Spawn error: ' + result);
-    }
-  },
-
-  matchTarget(role, targetNumber) {
-    if (countCreeps(role) < targetNumber) {
-      console.log(`${countCreeps(role)} of ${targetNumber} ${role}s`);
-      this.spawnCreepWithRole(role);
-    } else {
-      // console.log(`We have enough ${creepRole}s`);
+      matchTarget(role, targetNumber);
     }
   }
 };
