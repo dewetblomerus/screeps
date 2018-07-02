@@ -2,8 +2,8 @@ const _ = require('lodash');
 
 const targetState = {
   harvester: 3,
-  upgrader: 0,
-  builder: 0
+  upgrader: 4,
+  builder: 2
 };
 
 var creepCounter = {
