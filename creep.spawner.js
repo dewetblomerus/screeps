@@ -1,5 +1,11 @@
 var _ = require('lodash');
 
+var targetState = {
+  harvester: 2,
+  upgrader: 3,
+  builder: 3
+};
+
 var creepCounter = {
   run: function(unitRole) {
     var filteredCreeps = _.filter(Game.creeps, function(creep) {
@@ -11,16 +17,23 @@ var creepCounter = {
 };
 
 var creepSpawner = {
-  targetNumber: 3,
-  creepRole: 'builder',
   run: function() {
-    if (creepCounter.run(this.creepRole) < this.targetNumber) {
-      console.log(`we have less than ${this.targetNumber} ${this.creepRole}s`);
+    for (const role in targetState) {
+      const targetNumber = targetState[role];
+      this.matchTarget(role, targetNumber);
+    }
+  },
+
+  matchTarget: function(creepRole, targetNumber) {
+    if (creepCounter.run(creepRole) < targetNumber) {
+      console.log(
+        `${creepCounter.run(creepRole)} of ${targetNumber} ${creepRole}s`
+      );
       const result = Game.spawns['Spawn1'].spawnCreep(
         [WORK, CARRY, MOVE],
-        `${this.creepRole} ${Game.time}`,
+        `${creepRole} ${Game.time}`,
         {
-          memory: { role: this.creepRole }
+          memory: { role: creepRole }
         }
       );
       if (_.isString(result)) {
@@ -29,7 +42,7 @@ var creepSpawner = {
         console.log('Spawn error: ' + result);
       }
     } else {
-      console.log(`We have enough ${this.creepRole}s`);
+      // console.log(`We have enough ${creepRole}s`);
     }
   }
 };
