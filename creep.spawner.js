@@ -2,8 +2,32 @@ const _ = require('lodash');
 
 const targetState = {
   harvester: 4,
-  upgrader: 5,
+  upgrader: 6,
   builder: 0
+};
+
+let currentState = {};
+
+const logObject = object => {
+  return Object.keys(object).map(role => `${role}: ${countCreeps(role)}`);
+};
+
+const creepSpawner = {
+  run() {
+    let currentState = {};
+
+    for (const role in targetState) {
+      currentState[role] = countCreeps(role);
+    }
+
+    console.log(`currentState: ${logObject(currentState)}`);
+    console.log(`targetState: ${logObject(targetState)}`);
+
+    for (const role in targetState) {
+      const targetNumber = targetState[role];
+      matchTarget(role, targetNumber);
+    }
+  }
 };
 
 const countCreeps = role => {
@@ -33,15 +57,6 @@ const matchTarget = (role, targetNumber) => {
   if (countCreeps(role) < targetNumber) {
     console.log(`${countCreeps(role)} of ${targetNumber} ${role}s`);
     spawnCreepWithRole(role);
-  }
-};
-
-const creepSpawner = {
-  run() {
-    for (const role in targetState) {
-      const targetNumber = targetState[role];
-      matchTarget(role, targetNumber);
-    }
   }
 };
 
