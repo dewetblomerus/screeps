@@ -11,12 +11,11 @@ var creepCounter = {
 };
 
 var creepSpawner = {
-  targetNumber: 7,
-  creepRole: 'upgrader',
+  targetNumber: 3,
+  creepRole: 'builder',
   run: function() {
-    console.log(`${this.creepRole} Count: ${creepCounter.run(this.creepRole)}`);
     if (creepCounter.run(this.creepRole) < this.targetNumber) {
-      console.log(`we have less than ${this.targetNumber} creeps`);
+      console.log(`we have less than ${this.targetNumber} ${this.creepRole}s`);
       const result = Game.spawns['Spawn1'].spawnCreep(
         [WORK, CARRY, MOVE],
         `${this.creepRole} ${Game.time}`,
