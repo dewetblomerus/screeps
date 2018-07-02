@@ -1,9 +1,9 @@
-var _ = require('lodash');
+const _ = require('lodash');
 
-var targetState = {
+const targetState = {
   harvester: 2,
-  upgrader: 3,
-  builder: 3
+  upgrader: 1,
+  builder: 1
 };
 
 var creepCounter = {
@@ -30,7 +30,7 @@ var creepSpawner = {
         `${creepCounter.run(creepRole)} of ${targetNumber} ${creepRole}s`
       );
       const result = Game.spawns['Spawn1'].spawnCreep(
-        [WORK, CARRY, MOVE],
+        [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE],
         `${creepRole} ${Game.time}`,
         {
           memory: { role: creepRole }
