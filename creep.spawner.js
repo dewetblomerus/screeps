@@ -12,7 +12,11 @@ const creepSpawner = {
       return countCreeps(role) < targetState[role].amount;
     });
 
-    console.log(`neededRoles: ${neededRoles}`);
+    const update = Object.keys(targetState).map(role => {
+      return `${role}: ${countCreeps(role)}/${targetState[role].amount}`;
+    });
+
+    console.log(update);
 
     const roleToSpawn = neededRoles.reduce((a, b) => {
       return targetState[a].priority < targetState[b].priority ? a : b;
