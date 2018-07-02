@@ -1,32 +1,26 @@
 const _ = require('lodash');
 
 const targetState = {
-  harvester: 4,
-  upgrader: 6,
-  builder: 0
-};
-
-let currentState = {};
-
-const logObject = object => {
-  return Object.keys(object).map(role => `${role}: ${countCreeps(role)}`);
+  harvester: { amount: 4, priority: 0 },
+  upgrader: { amount: 12, priority: 1 },
+  builder: { amount: 0, priority: 2 }
 };
 
 const creepSpawner = {
   run() {
-    let currentState = {};
+    const neededRoles = Object.keys(targetState).filter(role => {
+      return countCreeps(role) < targetState[role].amount;
+    });
 
-    for (const role in targetState) {
-      currentState[role] = countCreeps(role);
-    }
+    console.log(`neededRoles: ${neededRoles}`);
 
-    console.log(`currentState: ${logObject(currentState)}`);
-    console.log(`targetState: ${logObject(targetState)}`);
+    const roleToSpawn = neededRoles.reduce((a, b) => {
+      return targetState[a].priority < targetState[b].priority ? a : b;
+    });
 
-    for (const role in targetState) {
-      const targetNumber = targetState[role];
-      matchTarget(role, targetNumber);
-    }
+    console.log(`roleToSpawn: ${roleToSpawn}`);
+
+    spawnCreepWithRole(roleToSpawn);
   }
 };
 
@@ -50,13 +44,6 @@ const spawnCreepWithRole = role => {
     console.log('The name is: ' + result);
   } else {
     console.log('Spawn error: ' + result);
-  }
-};
-
-const matchTarget = (role, targetNumber) => {
-  if (countCreeps(role) < targetNumber) {
-    console.log(`${countCreeps(role)} of ${targetNumber} ${role}s`);
-    spawnCreepWithRole(role);
   }
 };
 
