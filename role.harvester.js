@@ -1,9 +1,10 @@
+const sourceIndex = 0;
 const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
 // const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
 
 const chooseSource = creep => {
   const sources = creep.room.find(FIND_SOURCES);
-  return sources[0];
+  return sources[sourceIndex];
 };
 
 const targets = creep => {

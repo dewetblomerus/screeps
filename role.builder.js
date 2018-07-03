@@ -1,7 +1,14 @@
-const harvest = creep => {
+const sourceIndex = 0;
+
+const chooseSource = creep => {
   const sources = creep.room.find(FIND_SOURCES);
-  if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-    creep.moveTo(sources[1], { visualizePathStyle: { stroke: '#ffaa00' } });
+  return sources[sourceIndex];
+};
+
+const harvest = creep => {
+  source = chooseSource(creep);
+  if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+    creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
   }
 };
 
