@@ -13,7 +13,7 @@ const creepSpawner = {
     });
 
     const update = Object.keys(targetState).map(role => {
-      return `${role}: ${countCreeps(role)}/${targetState[role].amount}`;
+      return ` ${role}s: ${countCreeps(role)}/${targetState[role].amount}`;
     });
 
     console.log(update);
@@ -22,7 +22,7 @@ const creepSpawner = {
       return targetState[a].priority < targetState[b].priority ? a : b;
     });
 
-    console.log(`roleToSpawn: ${roleToSpawn}`);
+    // console.log(`roleToSpawn: ${roleToSpawn}`);
 
     spawnCreepWithRole(roleToSpawn);
   }
@@ -47,7 +47,7 @@ const spawnCreepWithRole = role => {
   if (_.isString(result)) {
     console.log('The name is: ' + result);
   } else {
-    console.log('Spawn error: ' + result);
+    // console.log('Spawn error: ' + result);
   }
 };
 

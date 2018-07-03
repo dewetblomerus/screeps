@@ -18,7 +18,6 @@ var roleUpgrader = {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
         // console.log(`${creep.name} is now moving to the controller`);
         let target = Game.getObjectById(creep.memory.target);
-        console.log(`upgrader target: ${creep.memory.target}`);
         creep.moveTo(target, {
           // maxRooms: 1,
           visualizePathStyle: { stroke: '#ffffff' }
