@@ -62,7 +62,7 @@ const spawnCreepWithRole = role => {
   if (_.isString(result)) {
     console.log('The name is: ' + result);
   } else {
-    console.log('Spawn error: ' + result);
+    // console.log('Spawn error: ' + result);
   }
 };
 
