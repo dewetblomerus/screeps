@@ -1,10 +1,11 @@
+// const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
+const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
+
 const targets = creep => {
   return creep.room.find(FIND_STRUCTURES, {
     filter: structure => {
       return (
-        (structure.structureType == STRUCTURE_EXTENSION ||
-          structure.structureType == STRUCTURE_SPAWN ||
-          structure.structureType == STRUCTURE_TOWER) &&
+        targetTypes.includes(structure.structureType) &&
         structure.energy < structure.energyCapacity
       );
     }

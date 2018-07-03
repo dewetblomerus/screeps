@@ -38,7 +38,7 @@ const countCreeps = role => {
 
 const spawnCreepWithRole = role => {
   const result = Game.spawns['Spawn1'].spawnCreep(
-    [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE],
+    [WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
     `${role} ${Game.time}`,
     {
       memory: { role: role }
@@ -47,7 +47,7 @@ const spawnCreepWithRole = role => {
   if (_.isString(result)) {
     console.log('The name is: ' + result);
   } else {
-    // console.log('Spawn error: ' + result);
+    console.log('Spawn error: ' + result);
   }
 };
 

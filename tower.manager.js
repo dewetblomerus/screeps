@@ -12,11 +12,20 @@ var towerManager = {
         }
       );
       const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+      const roomName = tower.room.name;
+      const damagedCreep = Game.rooms[roomName].find(FIND_MY_CREEPS, {
+        filter: creep => {
+          return creep.hits < creep.hitsMax;
+        }
+      });
 
       if (closestHostile) {
         console.log('there is a hostile');
         const result = tower.attack(closestHostile);
         console.log(`attack result: ${result}`);
+      } else if (damagedCreep) {
+        console.log(`healing: ${damagedCreep.name}`);
+        tower.heal(damagedCreep);
       } else if (closestDamagedStructure) {
         tower.repair(closestDamagedStructure);
       }
