@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const targetState = {
-  harvester: { amount: 5, priority: 0 },
+  harvester: { amount: 3, priority: 0 },
   upgrader: { amount: 1, priority: 1 },
   builder: { amount: 12, priority: 2 }
 };
