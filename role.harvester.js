@@ -1,4 +1,4 @@
-const sourceIndex = 0;
+const sourceIndex = 1;
 const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
 // const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
 
@@ -17,23 +17,15 @@ const targets = creep => {
     }
   });
 
-  // console.log`unsorted: ${unsortedStructures.map(structure =>
-  //   creep.pos.getRangeTo(structure)
-  // )}`;
-
   sortedStructures = unsortedStructures.sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   });
 
-  // console.log`  sorted: ${sortedStructures.map(structure =>
-  //   creep.pos.getRangeTo(structure)
-  // )}`;
   return sortedStructures;
 };
 
 var roleHarvester = {
-  /** @param {Creep} creep **/
-  run: function(creep) {
+  run(creep) {
     if (creep.memory.depositing && creep.carry.energy == 0) {
       console.log(`Stop Depositing`);
       creep.memory.depositing = false;
@@ -46,8 +38,6 @@ var roleHarvester = {
     }
 
     if (creep.memory.depositing) {
-      // creep.say(`deposit`);
-      // creep.say(`harvester depositing: ${creep.memory.depositing}`);
       // console.log(`${creep.name} finding structures`);
       if (targets(creep).length > 0) {
         // console.log('there are targets');
@@ -61,10 +51,8 @@ var roleHarvester = {
         }
       }
     } else {
-      // creep.say(`gather`);
       const source = chooseSource(creep);
       if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-        // console.log(`${creep.name} moving to sources`);
         creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
       }
     }
