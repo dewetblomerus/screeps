@@ -1,3 +1,16 @@
+const targets = creep => {
+  return creep.room.find(FIND_STRUCTURES, {
+    filter: structure => {
+      return (
+        (structure.structureType == STRUCTURE_EXTENSION ||
+          structure.structureType == STRUCTURE_SPAWN ||
+          structure.structureType == STRUCTURE_TOWER) &&
+        structure.energy < structure.energyCapacity
+      );
+    }
+  });
+};
+
 var roleHarvester = {
   /** @param {Creep} creep **/
   run: function(creep) {
@@ -13,33 +26,26 @@ var roleHarvester = {
     }
 
     if (creep.memory.depositing) {
-      creep.say(`deposit`);
-      creep.say(`harvester depositing: ${creep.memory.depositing}`);
-      // console.log(`${creep.name} finding structures`);
-      var targets = creep.room.find(FIND_STRUCTURES, {
-        filter: structure => {
-          return (
-            (structure.structureType == STRUCTURE_EXTENSION ||
-              structure.structureType == STRUCTURE_SPAWN ||
-              structure.structureType == STRUCTURE_TOWER) &&
-            structure.energy < structure.energyCapacity
-          );
-        }
-      });
-      if (targets.length > 0) {
-        if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          // console.log(`delivering to ${targets[0].structureType}`);
-          creep.moveTo(targets[0], {
+      // creep.say(`deposit`);
+      // creep.say(`harvester depositing: ${creep.memory.depositing}`);
+      console.log(`${creep.name} finding structures`);
+      if (targets(creep).length > 0) {
+        // console.log('there are targets');
+        if (
+          creep.transfer(targets(creep)[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+        ) {
+          console.log(`moving to ${targets(creep)[0].structureType}`);
+          creep.moveTo(targets(creep)[0], {
             visualizePathStyle: { stroke: '#ffffff' }
           });
         }
       }
     } else {
-      var sources = creep.room.find(FIND_SOURCES);
+      const sources = creep.room.find(FIND_SOURCES);
       // creep.say(`gather`);
-      if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
+      if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
         // console.log(`${creep.name} moving to sources`);
-        creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+        creep.moveTo(sources[1], { visualizePathStyle: { stroke: '#ffaa00' } });
       }
     }
   }

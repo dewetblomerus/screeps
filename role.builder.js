@@ -1,3 +1,10 @@
+const harvest = creep => {
+  const sources = creep.room.find(FIND_SOURCES);
+  if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
+    creep.moveTo(sources[1], { visualizePathStyle: { stroke: '#ffaa00' } });
+  }
+};
+
 const findConstruction = creep => {
   return creep.room.find(FIND_CONSTRUCTION_SITES)[0];
 };
@@ -45,7 +52,7 @@ var roleBuilder = {
       // console.log(`${target.progress}/${target.progressTotal}`);
       let targets = creep.room.find(FIND_CONSTRUCTION_SITES);
       let target = chooseSite(creep);
-      console.log(`in progress: ${target}`);
+      // console.log(`in progress: ${target}`);
       // console.log(`builder target: ${creep.memory.target}`);
       if (targets.length) {
         if (creep.build(target) == ERR_NOT_IN_RANGE) {
@@ -61,10 +68,7 @@ var roleBuilder = {
         }
       }
     } else {
-      var sources = creep.room.find(FIND_SOURCES);
-      if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-        creep.moveTo(sources[1], { visualizePathStyle: { stroke: '#ffaa00' } });
-      }
+      harvest(creep);
     }
   }
 };

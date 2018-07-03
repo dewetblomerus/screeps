@@ -1,5 +1,6 @@
 const creepSpawner = require('creep.spawner');
 const creepManager = require('creep.manager');
+const towerManager = require('tower.manager');
 
 module.exports.loop = function() {
   for (const name in Memory.creeps) {
@@ -11,4 +12,5 @@ module.exports.loop = function() {
 
   creepSpawner.run();
   creepManager.run();
+  towerManager.run();
 };
