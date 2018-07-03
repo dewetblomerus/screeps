@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const targetState = {
-  harvester: { amount: 5, priority: 0 },
+  harvester: { amount: 3, priority: 0 },
   upgrader: { amount: 4, priority: 2 },
   builder: { amount: 0, priority: 1 }
 };
@@ -18,7 +18,7 @@ const creepSpawner = {
 
     console.log(update);
 
-    if (!neededRoles.empty) {
+    if (neededRoles.length > 1) {
       const roleToSpawn = neededRoles.reduce((a, b) => {
         return targetState[a].priority < targetState[b].priority ? a : b;
       });
@@ -32,7 +32,7 @@ const creepSpawner = {
 
 const countCreeps = role => {
   var filteredCreeps = _.filter(Game.creeps, function(creep) {
-    return creep.memory.role == role && creep.ticksToLive > 100;
+    return creep.memory.role == role && creep.ticksToLive > 200;
   }).length;
 
   return filteredCreeps;
