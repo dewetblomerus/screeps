@@ -18,13 +18,12 @@ const creepSpawner = {
 
     console.log(update);
 
-    if (neededRoles.length > 1) {
+    if (neededRoles.length > 0) {
       const roleToSpawn = neededRoles.reduce((a, b) => {
         return targetState[a].priority < targetState[b].priority ? a : b;
       });
 
       // console.log(`roleToSpawn: ${roleToSpawn}`);
-
       spawnCreepWithRole(roleToSpawn);
     }
   }
