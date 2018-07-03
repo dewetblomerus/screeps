@@ -40,7 +40,8 @@ const countCreeps = role => {
 
 const spawnCreepWithRole = role => {
   const result = Game.spawns['Spawn1'].spawnCreep(
-    [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+    // [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+    [WORK, CARRY, MOVE],
     `${role} ${Game.time}`,
     {
       memory: { role: role }

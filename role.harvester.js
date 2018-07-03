@@ -1,14 +1,30 @@
 const sourceIndex = 1;
-const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
-// const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
+// const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
+const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
 
 const chooseSource = creep => {
   const sources = creep.room.find(FIND_SOURCES);
   return sources[sourceIndex];
 };
 
+const chooseTarget = creep => {
+  // console.log(`targets: ${targets(creep).map(target => target.structureType)}`);
+
+  sortedTargets = targets(creep).sort((a, b) => {
+    return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
+  });
+
+  // console.log(
+  //   `sortedTargets: ${targets(creep).map(target => target.structureType)}`
+  // );
+  // console.log(sortedTargets.map(target => target.structureType));
+
+  // console.log(`chooseTarget: ${sortedTargets[0]}`);
+  return sortedTargets[0];
+};
+
 const targets = creep => {
-  const unsortedStructures = creep.room.find(FIND_STRUCTURES, {
+  return creep.room.find(FIND_STRUCTURES, {
     filter: structure => {
       return (
         targetTypes.includes(structure.structureType) &&
@@ -16,12 +32,6 @@ const targets = creep => {
       );
     }
   });
-
-  sortedStructures = unsortedStructures.sort((a, b) => {
-    return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
-  });
-
-  return sortedStructures;
 };
 
 var roleHarvester = {
@@ -39,13 +49,12 @@ var roleHarvester = {
 
     if (creep.memory.depositing) {
       // console.log(`${creep.name} finding structures`);
-      if (targets(creep).length > 0) {
-        // console.log('there are targets');
-        if (
-          creep.transfer(targets(creep)[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
-        ) {
-          // console.log(`moving to ${targets(creep)[0].structureType}`);
-          creep.moveTo(targets(creep)[0], {
+      let target = chooseTarget(creep);
+      if (target) {
+        // console.log('there is a target');
+        if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+          console.log('moving to target');
+          creep.moveTo(target, {
             visualizePathStyle: { stroke: '#ffffff' }
           });
         }
