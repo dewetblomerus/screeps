@@ -1,6 +1,6 @@
 const sourceIndex = 1;
-// const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
-const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
+const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
+// const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
 
 const chooseSource = creep => {
   const sources = creep.room.find(FIND_SOURCES);
@@ -8,19 +8,32 @@ const chooseSource = creep => {
 };
 
 const chooseTarget = creep => {
-  // console.log(`targets: ${targets(creep).map(target => target.structureType)}`);
+  // console.log(
+  //   `           targets: ${targets(creep).map(target => target.structureType)}`
+  // );
 
-  sortedTargets = targets(creep).sort((a, b) => {
+  sortedTargetsRange = targets(creep).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   });
 
   // console.log(
-  //   `sortedTargets: ${targets(creep).map(target => target.structureType)}`
+  //   `sortedTargetsRange: ${sortedTargetsRange.map(
+  //     target => target.structureType
+  //   )}`
   // );
   // console.log(sortedTargets.map(target => target.structureType));
 
-  // console.log(`chooseTarget: ${sortedTargets[0]}`);
-  return sortedTargets[0];
+  const filteredTargets = sortedTargetsRange.filter(
+    target => target.structureType != STRUCTURE_TOWER
+  );
+
+  if (filteredTargets.length > 0) {
+    // console.log(`filteredTargets: ${filteredTargets}`);
+    return filteredTargets[0];
+  }
+
+  console.log(`chooseTarget: ${sortedTargetsRange[0]}`);
+  return sortedTargetsRange[0];
 };
 
 const targets = creep => {
@@ -53,7 +66,7 @@ var roleHarvester = {
       if (target) {
         // console.log('there is a target');
         if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          console.log('moving to target');
+          // console.log('moving to target');
           creep.moveTo(target, {
             visualizePathStyle: { stroke: '#ffffff' }
           });
