@@ -8,20 +8,9 @@ const chooseSource = creep => {
 };
 
 const chooseTarget = creep => {
-  // console.log(
-  //   `           targets: ${targets(creep).map(target => target.structureType)}`
-  // );
-
   sortedTargetsRange = targets(creep).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   });
-
-  // console.log(
-  //   `sortedTargetsRange: ${sortedTargetsRange.map(
-  //     target => target.structureType
-  //   )}`
-  // );
-  // console.log(sortedTargets.map(target => target.structureType));
 
   const filteredTargets = sortedTargetsRange.filter(
     target => target.structureType != STRUCTURE_TOWER
@@ -32,7 +21,7 @@ const chooseTarget = creep => {
     return filteredTargets[0];
   }
 
-  console.log(`chooseTarget: ${sortedTargetsRange[0]}`);
+  // console.log(`chooseTarget: ${sortedTargetsRange[0]}`);
   return sortedTargetsRange[0];
 };
 
