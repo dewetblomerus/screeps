@@ -8,6 +8,8 @@ var roleUpgrader = {
     }
     if (!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
       creep.memory.upgrading = true;
+      console.log(`upgrader setting target: ${creep.room.controller.id}`);
+      creep.memory.target = creep.room.controller.id;
       // console.log(`${creep.name} is now upgrading`);
       creep.say('⚡ upgrade');
     }
@@ -15,7 +17,10 @@ var roleUpgrader = {
     if (creep.memory.upgrading) {
       if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
         // console.log(`${creep.name} is now moving to the controller`);
-        creep.moveTo(creep.room.controller, {
+        let target = Game.getObjectById(creep.memory.target);
+        console.log(`upgrader target: ${creep.memory.target}`);
+        creep.moveTo(target, {
+          // maxRooms: 1,
           visualizePathStyle: { stroke: '#ffffff' }
         });
       }
