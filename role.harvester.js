@@ -1,4 +1,4 @@
-const sourceIndex = 0;
+const sourceIndex = 1;
 const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
 // const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
 
@@ -55,10 +55,11 @@ var roleHarvester = {
       if (target) {
         // console.log('there is a target');
         if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          // console.log('moving to target');
-          creep.moveTo(target, {
+          console.log(`moving to target: ${target}`);
+          const result = creep.moveTo(target, {
             visualizePathStyle: { stroke: '#ffffff' }
           });
+          console.log(result);
         }
       }
     } else {
