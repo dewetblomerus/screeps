@@ -2,8 +2,8 @@ const _ = require('lodash');
 
 const targetState = {
   harvester: { amount: 2, priority: 0 },
-  upgrader: { amount: 4, priority: 2 },
-  builder: { amount: 0, priority: 1 }
+  upgrader: { amount: 1, priority: 2 },
+  builder: { amount: 1, priority: 1 }
 };
 
 const creepSpawner = {
@@ -44,10 +44,18 @@ const spawnCreepWithRole = role => {
       WORK,
       WORK,
       WORK,
+      WORK,
+      WORK,
       CARRY,
       CARRY,
       CARRY,
       CARRY,
+      CARRY,
+      CARRY,
+      CARRY,
+      MOVE,
+      MOVE,
+      MOVE,
       MOVE,
       MOVE,
       MOVE,

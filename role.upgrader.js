@@ -25,9 +25,9 @@ var roleUpgrader = {
       }
     } else {
       var sources = creep.room.find(FIND_SOURCES);
-      if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
+      if (creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
         // console.log(`${creep.name} is now moving to sources`);
-        creep.moveTo(sources[1], { visualizePathStyle: { stroke: '#ffaa00' } });
+        creep.moveTo(sources[0], { visualizePathStyle: { stroke: '#ffaa00' } });
       }
     }
   }

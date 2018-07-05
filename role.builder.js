@@ -1,4 +1,4 @@
-const sourceIndex = 0;
+const sourceIndex = 1;
 
 const chooseSource = creep => {
   const sources = creep.room.find(FIND_SOURCES);
