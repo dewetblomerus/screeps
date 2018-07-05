@@ -3,7 +3,23 @@ const targetTypes = [STRUCTURE_CONTAINER];
 // const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
 
 const chooseSource = creep => {
+  const sourceFromMemory = Game.getObjectById(creep.memory.targetSource);
+  // console.log(`source from memory: ${sourceFromMemory}`);
   const sources = creep.room.find(FIND_SOURCES);
+  let creeps = Game.creeps;
+  console.log(creeps);
+  for (const name in Game.creeps) {
+    const creep = Game.creeps[name];
+    console.log(creep);
+  }
+  // let targetedSources = Game.creeps.map(creep =>
+  //   Game.getObjectById(creep.memory.targetSource)
+  // );
+  // console.log(`sources: ${sources}`);
+  // untargetedSources = sources.filter(source => {
+  //   return !targetedSources.includes(source);
+  // });
+  // console.log(`untargeted: ${untargetedSources}`);
   return sources[sourceIndex];
 };
 
@@ -32,9 +48,14 @@ var roleWorker = {
   run(creep) {
     if (creep.memory.depositing && creep.carry.energy == 0) {
       console.log(`Start Harvesting`);
+      console.log(`Start Harvesting`);
+      console.log(`Start Harvesting`);
+      console.log(`Start Harvesting`);
       creep.memory.depositing = false;
-      let targetedSource = chooseSource(creep).id;
-      console.log(targetedSource);
+      let targetSource = chooseSource(creep).id;
+      console.log('targetedSource');
+      console.log(targetSource);
+      creep.memory.targetSource = targetSource;
       creep.say('🔄 harvest');
     }
     if (!creep.memory.depositing && creep.carry.energy == creep.carryCapacity) {
@@ -44,7 +65,7 @@ var roleWorker = {
     }
 
     if (creep.memory.depositing) {
-      console.log(`${creep.name} finding structures`);
+      // console.log(`${creep.name} finding structures`);
       let target = chooseTarget(creep);
       if (target) {
         // console.log('there is a target');

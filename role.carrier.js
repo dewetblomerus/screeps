@@ -78,7 +78,7 @@ var roleHarvester = {
     } else {
       const source = chooseSource(creep);
       if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        console.log('not in range');
+        // console.log('not in range');
         creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
       }
     }

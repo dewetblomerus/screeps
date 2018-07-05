@@ -1,8 +1,36 @@
 const _ = require('lodash');
 
+const maxBody = [
+  WORK,
+  WORK,
+  WORK,
+  WORK,
+  WORK,
+  WORK,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE
+];
+
+const smallBody = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+const currentBody = smallBody;
+
 const targetState = {
-  harvester: { amount: 2, priority: 0 },
-  upgrader: { amount: 2, priority: 2 },
+  harvester: { amount: 0, priority: 0 },
+  upgrader: { amount: 0, priority: 2 },
+  worker: { amount: 3, priority: 1 },
+  carrier: { amount: 4, priority: 1 },
   builder: { amount: 0, priority: 1 }
 };
 
@@ -39,29 +67,7 @@ const countCreeps = role => {
 
 const spawnCreepWithRole = role => {
   const result = Game.spawns['Spawn1'].spawnCreep(
-    [
-      WORK,
-      WORK,
-      WORK,
-      WORK,
-      WORK,
-      WORK,
-      CARRY,
-      CARRY,
-      CARRY,
-      CARRY,
-      CARRY,
-      CARRY,
-      CARRY,
-      MOVE,
-      MOVE,
-      MOVE,
-      MOVE,
-      MOVE,
-      MOVE,
-      MOVE
-    ],
-    // [WORK, CARRY, MOVE],
+    currentBody,
     `${role} ${Game.time}`,
     {
       memory: { role: role }
