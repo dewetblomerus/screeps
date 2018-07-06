@@ -84,7 +84,7 @@ const currentBody = smallBody;
 
 const targetState = {
   harvester: { amount: 0, body: maxBody, priority: 0 },
-  upgrader: { amount: 0, body: workerBody, priority: 3 },
+  upgrader: { amount: 1, body: workerBody, priority: 3 },
   worker: { amount: 2, body: workerBody, priority: 2 },
   carrier: { amount: 2, body: carrierBody, priority: 1 },
   builder: { amount: 0, body: maxBody, priority: 4 }
@@ -122,7 +122,7 @@ const countCreeps = role => {
 };
 
 const spawnCreepWithRole = role => {
-  console.log(`roleToSpawn: ${role}`);
+  // console.log(`roleToSpawn: ${role}`);
   // console.log(targetState[role].body);
   const result = Game.spawns['Spawn1'].spawnCreep(
     targetState[role].body,

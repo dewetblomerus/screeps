@@ -49,6 +49,7 @@ const chooseStructureType = creep => {
     // console.log(`prioritized structureType: ${structureType}`);
     return structureType;
   }
+  return STRUCTURE_STORAGE;
 };
 
 const structuresOfType = (creep, structureType) => {
@@ -70,18 +71,27 @@ const getTarget = creep => {
 const setTarget = creep => {
   if (creep.memory.target) {
     target = Game.getObjectById(creep.memory.target);
+    console.log(target);
+    if (target.structureType == STRUCTURE_STORAGE) {
+      return;
+    }
+
     if (target.energy < target.energyCapacity) {
       return;
     } else {
-      console.log('target is already full');
+      // console.log('target is already full');
     }
   }
-  creep.memory.target = chooseTarget(creep).id;
+  if (chooseTarget(creep)) {
+    creep.memory.target = chooseTarget(creep).id;
+  }
 };
 
 const chooseTarget = creep => {
   structureType = chooseStructureType(creep);
-
+  if (structureType == STRUCTURE_STORAGE) {
+    return creep.room.storage;
+  }
   sortedTargetsRange = structuresOfType(creep, structureType).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   });
@@ -120,6 +130,7 @@ var roleCarrier = {
     if (creep.memory.depositing) {
       // console.log(`${creep.name} finding structures`);
       let target = getTarget(creep);
+      // console.log(`Depositing: ${target}`);
       if (target) {
         // console.log('there is a target');
         if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

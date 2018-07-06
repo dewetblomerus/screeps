@@ -24,10 +24,11 @@ var roleUpgrader = {
         });
       }
     } else {
-      var sources = creep.room.find(FIND_SOURCES);
-      if (creep.harvest(sources[1]) == ERR_NOT_IN_RANGE) {
-        // console.log(`${creep.name} is now moving to sources`);
-        creep.moveTo(sources[1], { visualizePathStyle: { stroke: '#ffaa00' } });
+      const source = creep.room.storage;
+      console.log(`upgrader withdrawing from: ${source}`);
+      if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        // console.log('not in range');
+        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
       }
     }
   }

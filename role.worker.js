@@ -56,13 +56,13 @@ const targets = creep => {
 var roleWorker = {
   run(creep) {
     if (creep.memory.depositing && creep.carry.energy == 0) {
-      console.log(`Worker Start Harvesting`);
+      // console.log(`Worker Start Harvesting`);
       creep.memory.depositing = false;
       setSource(creep);
       creep.say('🔄 harvest');
     }
     if (!creep.memory.depositing && creep.carry.energy == creep.carryCapacity) {
-      console.log(`Worker Start Depositing`);
+      // console.log(`Worker Start Depositing`);
       creep.memory.depositing = true;
       creep.say('🔋 deposit');
     }
