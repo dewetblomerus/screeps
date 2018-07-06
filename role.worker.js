@@ -28,7 +28,7 @@ const chooseSource = creep => {
   untargetedSources = sources.filter(source => {
     return !targetedSources.includes(source);
   });
-  console.log(`untargeted: ${untargetedSources}`);
+  // console.log(`untargeted: ${untargetedSources}`);
   return untargetedSources[0];
 };
 

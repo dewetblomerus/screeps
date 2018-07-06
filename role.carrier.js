@@ -1,5 +1,17 @@
-const sourceIndex = 1;
-const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
+const targetPriorities = {
+  extension: { slug: STRUCTURE_EXTENSION, priority: 0 },
+  spawn: { slug: STRUCTURE_SPAWN, priority: 5 },
+  tower: { slug: STRUCTURE_TOWER, priority: 2 },
+  storage: { slug: STRUCTURE_STORAGE, priority: 3 },
+  container: { slug: STRUCTURE_CONTAINER, priority: 4 }
+};
+
+const targetTypes = [
+  STRUCTURE_EXTENSION,
+  STRUCTURE_SPAWN,
+  STRUCTURE_TOWER,
+  STRUCTURE_STORAGE
+];
 const sourceTypes = [STRUCTURE_CONTAINER];
 // const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
 
@@ -20,25 +32,48 @@ const chooseSource = creep => {
   })[0];
 };
 
+const chooseStructureType = creep => {
+  structures = targetsNeedingEnergy(creep);
+  structureTypesNeedingEnergy = structures.map(
+    structure => structure.structureType
+  );
+  console.log(structureTypesNeedingEnergy);
+  if (structureTypesNeedingEnergy.length > 0) {
+    // console.log('there are targets');
+    const structureType = structureTypesNeedingEnergy.reduce((a, b) => {
+      return targetPriorities[a].priority < targetPriorities[b].priority
+        ? a
+        : b;
+    });
+
+    console.log(`prioritized structureType: ${structureType}`);
+    return structureType;
+  }
+};
+
+const structuresOfType = (creep, structureType) => {
+  return creep.room.find(FIND_STRUCTURES, {
+    filter: structure => {
+      return (
+        structure.structureType == structureType &&
+        structure.energy < structure.energyCapacity
+      );
+    }
+  });
+};
+
 const chooseTarget = creep => {
-  sortedTargetsRange = targets(creep).sort((a, b) => {
+  structureType = chooseStructureType(creep);
+
+  sortedTargetsRange = structuresOfType(creep, structureType).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   });
-
-  const filteredTargets = sortedTargetsRange.filter(
-    target => target.structureType != STRUCTURE_TOWER
-  );
-
-  if (filteredTargets.length > 0) {
-    // console.log(`filteredTargets: ${filteredTargets}`);
-    return filteredTargets[0];
-  }
 
   // console.log(`chooseTarget: ${sortedTargetsRange[0]}`);
   return sortedTargetsRange[0];
 };
 
-const targets = creep => {
+const targetsNeedingEnergy = creep => {
   return creep.room.find(FIND_STRUCTURES, {
     filter: structure => {
       return (
