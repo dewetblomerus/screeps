@@ -23,6 +23,50 @@ const maxBody = [
   MOVE
 ];
 
+const carrierBody = [
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  CARRY,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE
+];
+
+const workerBody = [
+  WORK,
+  WORK,
+  WORK,
+  WORK,
+  WORK,
+  WORK,
+  WORK,
+  WORK,
+  CARRY,
+  CARRY,
+  MOVE,
+  MOVE
+];
+
 const smallBody = [
   WORK,
   WORK,
@@ -39,11 +83,11 @@ const smallBody = [
 const currentBody = smallBody;
 
 const targetState = {
-  harvester: { amount: 0, priority: 0 },
-  upgrader: { amount: 2, priority: 2 },
-  worker: { amount: 2, priority: 1 },
-  carrier: { amount: 3, priority: 1 },
-  builder: { amount: 0, priority: 1 }
+  harvester: { amount: 0, body: maxBody, priority: 0 },
+  upgrader: { amount: 0, body: workerBody, priority: 3 },
+  worker: { amount: 2, body: workerBody, priority: 2 },
+  carrier: { amount: 2, body: carrierBody, priority: 1 },
+  builder: { amount: 0, body: maxBody, priority: 4 }
 };
 
 const creepSpawner = {
@@ -78,8 +122,10 @@ const countCreeps = role => {
 };
 
 const spawnCreepWithRole = role => {
+  console.log(`roleToSpawn: ${role}`);
+  // console.log(targetState[role].body);
   const result = Game.spawns['Spawn1'].spawnCreep(
-    currentBody,
+    targetState[role].body,
     `${role} ${Game.time}`,
     {
       memory: { role: role }

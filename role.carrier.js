@@ -37,7 +37,7 @@ const chooseStructureType = creep => {
   structureTypesNeedingEnergy = structures.map(
     structure => structure.structureType
   );
-  console.log(structureTypesNeedingEnergy);
+  // console.log(structureTypesNeedingEnergy);
   if (structureTypesNeedingEnergy.length > 0) {
     // console.log('there are targets');
     const structureType = structureTypesNeedingEnergy.reduce((a, b) => {
@@ -46,7 +46,7 @@ const chooseStructureType = creep => {
         : b;
     });
 
-    console.log(`prioritized structureType: ${structureType}`);
+    // console.log(`prioritized structureType: ${structureType}`);
     return structureType;
   }
 };
@@ -64,7 +64,7 @@ const structuresOfType = (creep, structureType) => {
 
 const getTarget = creep => {
   setTarget(creep);
-  Game.getObjectById(creep.memory.target);
+  return Game.getObjectById(creep.memory.target);
 };
 
 const setTarget = creep => {
@@ -86,7 +86,7 @@ const chooseTarget = creep => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   });
 
-  console.log(`chooseTarget: ${sortedTargetsRange.length}`);
+  // console.log(`chooseTarget: ${sortedTargetsRange.length}`);
   const newTarget = sortedTargetsRange[0];
   return newTarget;
 };
@@ -132,6 +132,7 @@ var roleCarrier = {
       }
     } else {
       const source = chooseSource(creep);
+      // console.log(source);
       if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         // console.log('not in range');
         creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
