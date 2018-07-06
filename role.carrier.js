@@ -62,11 +62,14 @@ const structuresOfType = (creep, structureType) => {
   });
 };
 
+const getTarget = creep => {
+  setTarget(creep);
+  Game.getObjectById(creep.memory.target);
+};
+
 const setTarget = creep => {
   if (creep.memory.target) {
-    console.log('it has a target');
     target = Game.getObjectById(creep.memory.target);
-    console.log(target);
     if (target.energy < target.energyCapacity) {
       return;
     } else {
@@ -116,8 +119,7 @@ var roleCarrier = {
 
     if (creep.memory.depositing) {
       // console.log(`${creep.name} finding structures`);
-      setTarget(creep);
-      let target = Game.getObjectById(creep.memory.target);
+      let target = getTarget(creep);
       if (target) {
         // console.log('there is a target');
         if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
