@@ -4,7 +4,7 @@ const targetTypes = [STRUCTURE_CONTAINER];
 
 const chooseSource = creep => {
   const sourceFromMemory = Game.getObjectById(creep.memory.targetSource);
-  console.log(sourceFromMemory);
+  // console.log(sourceFromMemory);
   if (creep.memory.targetSource) {
     // console.log(`source from memory: ${sourceFromMemory}`);
     return sourceFromMemory;
@@ -20,11 +20,11 @@ const chooseSource = creep => {
   const targetedSources = Object.keys(Game.creeps).map(creepName =>
     Game.getObjectById(Game.creeps[creepName].memory.targetSource)
   );
-  console.log(`targetedSources: ${targetedSources}`);
+  // console.log(`targetedSources: ${targetedSources}`);
   untargetedSources = sources.filter(source => {
     return !targetedSources.includes(source);
   });
-  console.log(`untargeted: ${untargetedSources}`);
+  // console.log(`untargeted: ${untargetedSources}`);
   return untargetedSources[sourceIndex];
 };
 
@@ -55,8 +55,8 @@ var roleWorker = {
       console.log(`Start Harvesting`);
       creep.memory.depositing = false;
       let targetSource = chooseSource(creep).id;
-      console.log('targetedSource');
-      console.log(targetSource);
+      // console.log('targetedSource');
+      // console.log(targetSource);
       creep.memory.targetSource = targetSource;
       creep.say('🔄 harvest');
     }
