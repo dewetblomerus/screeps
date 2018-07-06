@@ -37,7 +37,7 @@ const chooseStructureType = creep => {
   structureTypesNeedingEnergy = structures.map(
     structure => structure.structureType
   );
-  // console.log(structureTypesNeedingEnergy);
+  console.log(structureTypesNeedingEnergy);
   if (structureTypesNeedingEnergy.length > 0) {
     // console.log('there are targets');
     const structureType = structureTypesNeedingEnergy.reduce((a, b) => {
@@ -62,25 +62,29 @@ const structuresOfType = (creep, structureType) => {
   });
 };
 
-const chooseTarget = creep => {
+const setTarget = creep => {
   if (creep.memory.target) {
     console.log('it has a target');
     target = Game.getObjectById(creep.memory.target);
+    console.log(target);
     if (target.energy < target.energyCapacity) {
-      return target;
+      return;
     } else {
-      console.log('it is already full');
+      console.log('target is already full');
     }
   }
+  creep.memory.target = chooseTarget(creep).id;
+};
+
+const chooseTarget = creep => {
   structureType = chooseStructureType(creep);
 
   sortedTargetsRange = structuresOfType(creep, structureType).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   });
 
-  // console.log(`chooseTarget: ${sortedTargetsRange[0]}`);
+  console.log(`chooseTarget: ${sortedTargetsRange.length}`);
   const newTarget = sortedTargetsRange[0];
-  creep.memory.target = newTarget.id;
   return newTarget;
 };
 
@@ -112,7 +116,8 @@ var roleCarrier = {
 
     if (creep.memory.depositing) {
       // console.log(`${creep.name} finding structures`);
-      let target = chooseTarget(creep);
+      setTarget(creep);
+      let target = Game.getObjectById(creep.memory.target);
       if (target) {
         // console.log('there is a target');
         if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
