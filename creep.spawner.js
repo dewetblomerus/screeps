@@ -23,12 +23,24 @@ const maxBody = [
   MOVE
 ];
 
-const smallBody = [WORK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE];
+const smallBody = [
+  WORK,
+  WORK,
+  CARRY,
+  CARRY,
+  CARRY,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE,
+  MOVE
+];
 const currentBody = smallBody;
 
 const targetState = {
   harvester: { amount: 0, priority: 0 },
-  upgrader: { amount: 0, priority: 2 },
+  upgrader: { amount: 2, priority: 2 },
   worker: { amount: 2, priority: 1 },
   carrier: { amount: 3, priority: 1 },
   builder: { amount: 0, priority: 1 }

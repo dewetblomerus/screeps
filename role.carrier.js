@@ -1,6 +1,6 @@
 const targetPriorities = {
   extension: { slug: STRUCTURE_EXTENSION, priority: 0 },
-  spawn: { slug: STRUCTURE_SPAWN, priority: 5 },
+  spawn: { slug: STRUCTURE_SPAWN, priority: 1 },
   tower: { slug: STRUCTURE_TOWER, priority: 2 },
   storage: { slug: STRUCTURE_STORAGE, priority: 3 },
   container: { slug: STRUCTURE_CONTAINER, priority: 4 }
@@ -37,7 +37,7 @@ const chooseStructureType = creep => {
   structureTypesNeedingEnergy = structures.map(
     structure => structure.structureType
   );
-  console.log(structureTypesNeedingEnergy);
+  // console.log(structureTypesNeedingEnergy);
   if (structureTypesNeedingEnergy.length > 0) {
     // console.log('there are targets');
     const structureType = structureTypesNeedingEnergy.reduce((a, b) => {
@@ -63,6 +63,15 @@ const structuresOfType = (creep, structureType) => {
 };
 
 const chooseTarget = creep => {
+  if (creep.memory.target) {
+    console.log('it has a target');
+    target = Game.getObjectById(creep.memory.target);
+    if (target.energy < target.energyCapacity) {
+      return target;
+    } else {
+      console.log('it is already full');
+    }
+  }
   structureType = chooseStructureType(creep);
 
   sortedTargetsRange = structuresOfType(creep, structureType).sort((a, b) => {
@@ -70,7 +79,9 @@ const chooseTarget = creep => {
   });
 
   // console.log(`chooseTarget: ${sortedTargetsRange[0]}`);
-  return sortedTargetsRange[0];
+  const newTarget = sortedTargetsRange[0];
+  creep.memory.target = newTarget.id;
+  return newTarget;
 };
 
 const targetsNeedingEnergy = creep => {
@@ -84,7 +95,7 @@ const targetsNeedingEnergy = creep => {
   });
 };
 
-var roleHarvester = {
+var roleCarrier = {
   run(creep) {
     if (creep.memory.depositing && creep.carry.energy == 0) {
       console.log(`Start Collecting`);
@@ -94,6 +105,8 @@ var roleHarvester = {
     if (!creep.memory.depositing && creep.carry.energy == creep.carryCapacity) {
       console.log(`Start Depositing`);
       creep.memory.depositing = true;
+      console.log(chooseTarget(creep).id);
+      creep.memory.target = chooseTarget(creep).id;
       creep.say('deposit');
     }
 
@@ -120,4 +133,4 @@ var roleHarvester = {
   }
 };
 
-module.exports = roleHarvester;
+module.exports = roleCarrier;
