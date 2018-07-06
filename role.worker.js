@@ -1,4 +1,3 @@
-const sourceIndex = 0;
 const targetTypes = [STRUCTURE_CONTAINER];
 // const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
 
@@ -30,7 +29,7 @@ const chooseSource = creep => {
     return !targetedSources.includes(source);
   });
   console.log(`untargeted: ${untargetedSources}`);
-  return untargetedSources[sourceIndex];
+  return untargetedSources[0];
 };
 
 const chooseDestination = creep => {
