@@ -60,7 +60,6 @@ const workerBody = [
   WORK,
   WORK,
   WORK,
-  WORK,
   CARRY,
   CARRY,
   MOVE,
@@ -85,8 +84,8 @@ const currentBody = smallBody;
 const targetState = {
   harvester: { amount: 0, body: maxBody, priority: 0 },
   upgrader: { amount: 1, body: workerBody, priority: 3 },
-  worker: { amount: 2, body: workerBody, priority: 2 },
-  carrier: { amount: 2, body: carrierBody, priority: 1 },
+  worker: { amount: 2, body: workerBody, priority: 1 },
+  carrier: { amount: 3, body: carrierBody, priority: 2 },
   builder: { amount: 0, body: maxBody, priority: 4 }
 };
 

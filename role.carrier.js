@@ -20,16 +20,27 @@ const sources = creep => {
     filter: structure => {
       return (
         sourceTypes.includes(structure.structureType) &&
-        structure.store[RESOURCE_ENERGY] > 0
+        structure.store[RESOURCE_ENERGY] > 500
       );
     }
   });
 };
 
-const chooseSource = creep => {
-  return sources(creep).sort((a, b) => {
+const getSource = creep => {
+  // if (creep.memory.source) {
+  //   // console.log('there is a source in memory');
+  //   sourceFromMemory = Game.getObjectById(creep.memory.source);
+  //   // console.log(sourceFromMemory);
+  //   if (sourceFromMemory.store[RESOURCE_ENERGY] > 0) {
+  //     return sourceFromMemory;
+  //   }
+  // }
+  const newSource = sources(creep).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   })[0];
+
+  // creep.memory.source = newSource.id
+  return newSource;
 };
 
 const chooseStructureType = creep => {
@@ -71,7 +82,7 @@ const getTarget = creep => {
 const setTarget = creep => {
   if (creep.memory.target) {
     target = Game.getObjectById(creep.memory.target);
-    console.log(target);
+    // console.log(target);
     if (target.structureType == STRUCTURE_STORAGE) {
       return;
     }
@@ -115,14 +126,14 @@ const targetsNeedingEnergy = creep => {
 var roleCarrier = {
   run(creep) {
     if (creep.memory.depositing && creep.carry.energy == 0) {
-      console.log(`Start Collecting`);
+      console.log(`Carrier start Collecting`);
       creep.memory.depositing = false;
       creep.say('🔄 collect');
     }
     if (!creep.memory.depositing && creep.carry.energy == creep.carryCapacity) {
-      console.log(`Start Depositing`);
+      console.log(`Carrier start Depositing`);
       creep.memory.depositing = true;
-      console.log(chooseTarget(creep).id);
+      // console.log(chooseTarget(creep).id);
       creep.memory.target = chooseTarget(creep).id;
       creep.say('deposit');
     }
@@ -142,7 +153,7 @@ var roleCarrier = {
         }
       }
     } else {
-      const source = chooseSource(creep);
+      const source = getSource(creep);
       // console.log(source);
       if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
         // console.log('not in range');
