@@ -27,14 +27,6 @@ const sources = creep => {
 };
 
 const getSource = creep => {
-  // if (creep.memory.source) {
-  //   // console.log('there is a source in memory');
-  //   sourceFromMemory = Game.getObjectById(creep.memory.source);
-  //   // console.log(sourceFromMemory);
-  //   if (sourceFromMemory.store[RESOURCE_ENERGY] > 0) {
-  //     return sourceFromMemory;
-  //   }
-  // }
   const newSource = sources(creep).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   })[0];
