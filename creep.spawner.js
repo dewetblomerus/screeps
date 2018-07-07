@@ -94,11 +94,15 @@ const creepSpawner = {
       return countCreeps(role) < targetState[role].amount;
     });
 
-    const update = Object.keys(targetState).map(role => {
+    const populationUpdate = Object.keys(targetState).map(role => {
       return ` ${role}s: ${countCreeps(role)}/${targetState[role].amount}`;
     });
 
-    console.log(update);
+    const energyUpdate = `Energy: ${
+      Game.spawns['Spawn1'].room.energyAvailable
+    }/${Game.spawns['Spawn1'].room.energyCapacityAvailable}`;
+
+    console.log(`Population: ${populationUpdate} ${energyUpdate}`);
 
     if (neededRoles.length > 0) {
       const roleToSpawn = neededRoles.reduce((a, b) => {
