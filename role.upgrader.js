@@ -4,7 +4,7 @@ var roleUpgrader = {
     if (creep.memory.upgrading && creep.carry.energy == 0) {
       creep.memory.upgrading = false;
       // console.log(`${creep.name} is now harvesting`);
-      creep.say('🔄 harvest');
+      creep.say('🔄 withdraw');
     }
     if (!creep.memory.upgrading && creep.carry.energy == creep.carryCapacity) {
       creep.memory.upgrading = true;
