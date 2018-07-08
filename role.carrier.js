@@ -1,3 +1,4 @@
+const minEnergyToMove = 300;
 const targetPriorities = {
   extension: { slug: STRUCTURE_EXTENSION, priority: 0 },
   spawn: { slug: STRUCTURE_SPAWN, priority: 1 },
@@ -13,14 +14,13 @@ const targetTypes = [
   STRUCTURE_STORAGE
 ];
 const sourceTypes = [STRUCTURE_CONTAINER];
-// const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN];
 
 const sources = creep => {
   return creep.room.find(FIND_STRUCTURES, {
     filter: structure => {
       return (
         sourceTypes.includes(structure.structureType) &&
-        structure.store[RESOURCE_ENERGY] > 500
+        structure.store[RESOURCE_ENERGY] > minEnergyToMove
       );
     }
   });
@@ -122,6 +122,7 @@ var roleCarrier = {
       creep.memory.depositing = false;
       creep.say('🔄 collect');
     }
+
     if (!creep.memory.depositing && creep.carry.energy == creep.carryCapacity) {
       console.log(`Carrier start Depositing`);
       creep.memory.depositing = true;

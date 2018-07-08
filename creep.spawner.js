@@ -65,27 +65,17 @@ const workerBody = [
   MOVE
 ];
 
-const smallBody = [
-  WORK,
-  WORK,
-  CARRY,
-  CARRY,
-  CARRY,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE
-];
+const smallBody = [WORK, WORK, CARRY, CARRY, MOVE, MOVE];
 const currentBody = smallBody;
 
+const minBody = [WORK, CARRY, MOVE];
+
 const targetState = {
-  harvester: { amount: 0, body: maxBody, priority: 0 },
-  upgrader: { amount: 2, body: workerBody, priority: 3 },
+  harvester: { amount: 0, body: smallBody, priority: 0 },
+  upgrader: { amount: 1, body: workerBody, priority: 5 },
   worker: { amount: 2, body: workerBody, priority: 1 },
-  carrier: { amount: 4, body: carrierBody, priority: 2 },
-  builder: { amount: 0, body: maxBody, priority: 4 }
+  carrier: { amount: 2, body: carrierBody, priority: 2 },
+  builder: { amount: 1, body: maxBody, priority: 4 }
 };
 
 const creepSpawner = {

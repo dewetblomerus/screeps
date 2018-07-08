@@ -1,8 +1,23 @@
-const sourceIndex = 1;
+const sourceTypes = [STRUCTURE_CONTAINER];
 
-const chooseSource = creep => {
-  const sources = creep.room.find(FIND_SOURCES);
-  return sources[sourceIndex];
+const sources = creep => {
+  return creep.room.find(FIND_STRUCTURES, {
+    filter: structure => {
+      return (
+        sourceTypes.includes(structure.structureType) &&
+        structure.store[RESOURCE_ENERGY] >= creep.carryCapacity
+      );
+    }
+  });
+};
+
+const getSource = creep => {
+  const newSource = sources(creep).sort((a, b) => {
+    return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
+  })[0];
+
+  // creep.memory.source = newSource.id
+  return newSource;
 };
 
 const harvest = creep => {
@@ -75,7 +90,12 @@ var roleBuilder = {
         }
       }
     } else {
-      harvest(creep);
+      const source = getSource(creep);
+      // console.log(source);
+      if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        // console.log('not in range');
+        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+      }
     }
   }
 };
