@@ -72,10 +72,10 @@ const minBody = [WORK, CARRY, MOVE];
 
 const targetState = {
   harvester: { amount: 0, body: smallBody, priority: 0 },
-  upgrader: { amount: 1, body: workerBody, priority: 5 },
+  upgrader: { amount: 2, body: workerBody, priority: 5 },
   worker: { amount: 2, body: workerBody, priority: 1 },
-  carrier: { amount: 2, body: carrierBody, priority: 2 },
-  builder: { amount: 1, body: maxBody, priority: 4 }
+  carrier: { amount: 4, body: carrierBody, priority: 2 },
+  builder: { amount: 0, body: maxBody, priority: 4 }
 };
 
 const creepSpawner = {
@@ -84,15 +84,19 @@ const creepSpawner = {
       return countCreeps(role) < targetState[role].amount;
     });
 
-    const populationUpdate = Object.keys(targetState).map(role => {
-      return ` ${role}s: ${countCreeps(role)}/${targetState[role].amount}`;
-    });
+    const populationUpdate = `Population:${Object.keys(targetState).map(
+      role => {
+        if (countCreeps(role) > 0) {
+          return ` ${role}: ${countCreeps(role)}/${targetState[role].amount}`;
+        }
+      }
+    )}`;
 
     const energyUpdate = `Energy: ${
       Game.spawns['Spawn1'].room.energyAvailable
     }/${Game.spawns['Spawn1'].room.energyCapacityAvailable}`;
 
-    console.log(`Population: ${populationUpdate} ${energyUpdate}`);
+    console.log(`${populationUpdate} ${energyUpdate}`);
 
     if (neededRoles.length > 0) {
       const roleToSpawn = neededRoles.reduce((a, b) => {

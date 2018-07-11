@@ -3,15 +3,18 @@ const targetPriorities = {
   extension: { slug: STRUCTURE_EXTENSION, priority: 0 },
   spawn: { slug: STRUCTURE_SPAWN, priority: 1 },
   tower: { slug: STRUCTURE_TOWER, priority: 2 },
-  storage: { slug: STRUCTURE_STORAGE, priority: 3 },
-  container: { slug: STRUCTURE_CONTAINER, priority: 4 }
+  // container: { slug: 'sourceContainer', priority: 4 },
+  link: { slug: STRUCTURE_LINK, priority: 4 },
+  storage: { slug: STRUCTURE_STORAGE, priority: 5 },
+  container: { slug: STRUCTURE_CONTAINER, priority: 6 }
 };
 
 const targetTypes = [
   STRUCTURE_EXTENSION,
   STRUCTURE_SPAWN,
   STRUCTURE_TOWER,
-  STRUCTURE_STORAGE
+  STRUCTURE_STORAGE,
+  STRUCTURE_LINK
 ];
 const sourceTypes = [STRUCTURE_CONTAINER];
 
@@ -91,15 +94,22 @@ const setTarget = creep => {
 };
 
 const chooseTarget = creep => {
-  structureType = chooseStructureType(creep);
+  const structureType = chooseStructureType(creep);
+
   if (structureType == STRUCTURE_STORAGE) {
+    console.log('it is a storage');
     return creep.room.storage;
   }
+
+  if (structureType == 'sourceContainer') {
+    console.log('it is a sourceContainer');
+  }
+
   sortedTargetsRange = structuresOfType(creep, structureType).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b);
   });
 
-  // console.log(`chooseTarget: ${sortedTargetsRange.length}`);
+  console.log(`chooseTarget: ${sortedTargetsRange.length}`);
   const newTarget = sortedTargetsRange[0];
   return newTarget;
 };
@@ -113,6 +123,22 @@ const targetsNeedingEnergy = creep => {
       );
     }
   });
+};
+
+const deposit = creep => {
+  // console.log(`${creep.name} finding structures`);
+  let target = getTarget(creep);
+  // console.log(`Depositing: ${target}`);
+  if (target) {
+    // console.log('there is a target');
+    if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      // console.log(`moving to target: ${target}`);
+      const result = creep.moveTo(target, {
+        visualizePathStyle: { stroke: '#ffffff' }
+      });
+      // console.log(result);
+    }
+  }
 };
 
 var roleCarrier = {
@@ -132,19 +158,7 @@ var roleCarrier = {
     }
 
     if (creep.memory.depositing) {
-      // console.log(`${creep.name} finding structures`);
-      let target = getTarget(creep);
-      // console.log(`Depositing: ${target}`);
-      if (target) {
-        // console.log('there is a target');
-        if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          // console.log(`moving to target: ${target}`);
-          const result = creep.moveTo(target, {
-            visualizePathStyle: { stroke: '#ffffff' }
-          });
-          // console.log(result);
-        }
-      }
+      deposit(creep);
     } else {
       const source = getSource(creep);
       // console.log(source);
