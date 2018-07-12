@@ -1,3 +1,10 @@
+const sourceIndex = 1;
+
+const chooseSource = creep => {
+  const sources = creep.room.find(FIND_SOURCES);
+  return sources[sourceIndex];
+};
+
 var roleUpgrader = {
   /** @param {Creep} creep **/
   run: function(creep) {
@@ -24,11 +31,18 @@ var roleUpgrader = {
         });
       }
     } else {
-      const source = creep.room.storage;
-      // console.log(`upgrader withdrawing from: ${source}`);
-      if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        // console.log('not in range');
-        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+      if (creep.room.storage) {
+        const source = creep.room.storage;
+        // console.log(`upgrader withdrawing from: ${source}`);
+        if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+          // console.log('not in range');
+          creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+        }
+      } else {
+        const source = chooseSource(creep);
+        if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
+        }
       }
     }
   }

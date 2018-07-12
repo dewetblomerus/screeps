@@ -34,8 +34,8 @@ const bodyCost = body => {
 };
 
 const targetState = {
-  harvester: { amount: 2, body: balancedBody, priority: 0 },
-  upgrader: { amount: 1, body: balancedBody, priority: 1 },
+  harvester: { amount: 4, body: balancedBody, priority: 0 },
+  upgrader: { amount: 5, body: balancedBody, priority: 1 },
   worker: { amount: 0, body: workerBody, priority: 3 },
   carrier: { amount: 0, body: carrierBody, priority: 2 },
   builder: { amount: 0, body: balancedBody, priority: 4 }
