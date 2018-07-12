@@ -1,85 +1,53 @@
 const _ = require('lodash');
 
-const maxBody = [
-  WORK,
-  WORK,
-  WORK,
-  WORK,
-  WORK,
-  WORK,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE
-];
+const workerBody = [WORK, WORK, WORK, CARRY, MOVE];
 
-const carrierBody = [
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  CARRY,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE,
-  MOVE
-];
+const balancedBody = [WORK, CARRY, MOVE];
 
-const workerBody = [
-  WORK,
-  WORK,
-  WORK,
-  WORK,
-  WORK,
-  WORK,
-  CARRY,
-  CARRY,
-  MOVE,
-  MOVE
-];
+const carrierBody = [CARRY, MOVE];
 
-const smallBody = [WORK, WORK, CARRY, CARRY, MOVE, MOVE];
-const currentBody = smallBody;
+const creepBody = (priorityBody, energyBudget) => {
+  body = priorityBody;
 
-const minBody = [WORK, CARRY, MOVE];
+  while (bodyCost(body) + bodyCost(priorityBody) <= energyBudget) {
+    body = [...body, ...priorityBody];
+  }
+
+  for (part of priorityBody) {
+    if (bodyCost(body) + bodyPartCost[part] <= energyBudget) {
+      body = [...body, part];
+    }
+  }
+  console.log(body);
+  console.log(`bodyCost: ${bodyCost(body)} / ${energyBudget}`);
+  return body;
+};
+
+const bodyPartCost = {
+  work: 100,
+  carry: 50,
+  move: 50
+};
+
+const bodyCost = body => {
+  return body.reduce((prev, bodyPart) => prev + bodyPartCost[bodyPart], 0);
+};
 
 const targetState = {
-  harvester: { amount: 0, body: smallBody, priority: 0 },
-  upgrader: { amount: 2, body: workerBody, priority: 5 },
-  worker: { amount: 2, body: workerBody, priority: 1 },
-  carrier: { amount: 4, body: carrierBody, priority: 2 },
-  builder: { amount: 0, body: maxBody, priority: 4 }
+  harvester: { amount: 2, body: balancedBody, priority: 0 },
+  upgrader: { amount: 1, body: balancedBody, priority: 1 },
+  worker: { amount: 0, body: workerBody, priority: 3 },
+  carrier: { amount: 0, body: carrierBody, priority: 2 },
+  builder: { amount: 0, body: balancedBody, priority: 4 }
 };
 
 const creepSpawner = {
   run() {
+    const calculatedBody = creepBody(
+      [WORK, CARRY, MOVE],
+      Game.spawns['Spawn1'].room.energyCapacityAvailable
+    );
+
     const neededRoles = Object.keys(targetState).filter(role => {
       return countCreeps(role) < targetState[role].amount;
     });
@@ -121,7 +89,10 @@ const spawnCreepWithRole = role => {
   // console.log(`roleToSpawn: ${role}`);
   // console.log(targetState[role].body);
   const result = Game.spawns['Spawn1'].spawnCreep(
-    targetState[role].body,
+    creepBody(
+      targetState[role].body,
+      Game.spawns['Spawn1'].room.energyCapacityAvailable
+    ),
     `${role} ${Game.time}`,
     {
       memory: { role: role }
