@@ -1,10 +1,10 @@
 const creepSpawner = require('creep.spawner')
 const creepManager = require('creep.manager')
 const towerManager = require('tower.manager')
-const memoryClearer = require('memoryClearer')
+const clearMemory = require('clearMemory')
 
 module.exports.loop = function() {
-  memoryClearer.run()
+  clearMemory()
 
   creepSpawner.run()
   creepManager.run()
