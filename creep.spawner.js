@@ -48,11 +48,6 @@ const spawnCreepWithRole = (role, bodyPriority) => {
 }
 
 const spawnCreeps = targetState => {
-  const calculatedBody = creepBody(
-    [WORK, CARRY, MOVE],
-    Game.spawns['Spawn1'].room.energyCapacityAvailable
-  )
-
   const neededRoles = Object.keys(targetState).filter(role => {
     return countCreeps(role) < targetState[role].amount
   })
