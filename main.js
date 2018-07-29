@@ -2,10 +2,12 @@ const spawnCreeps = require('creep.spawner')
 const manageCreeps = require('creep.manager')
 const towerManager = require('tower.manager')
 const clearMemory = require('clearMemory')
+const targetState = require('creep.targetState')
 
 module.exports.loop = function() {
+  // const targetCreepState = targetState()
   clearMemory()
-  spawnCreeps()
+  spawnCreeps(targetState)
   manageCreeps()
 
   for (const name in Game.rooms) {

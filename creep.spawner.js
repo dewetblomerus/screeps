@@ -1,11 +1,5 @@
 const _ = require('lodash')
 
-const workerBody = [WORK, WORK, WORK, CARRY, MOVE]
-
-const balancedBody = [WORK, CARRY, MOVE]
-
-const carrierBody = [CARRY, MOVE]
-
 const creepBody = (priorityBody, energyBudget) => {
   body = priorityBody
 
@@ -33,14 +27,6 @@ const bodyCost = body => {
   return body.reduce((prev, bodyPart) => prev + bodyPartCost[bodyPart], 0)
 }
 
-const targetState = {
-  harvester: { amount: 4, body: balancedBody, priority: 0 },
-  upgrader: { amount: 5, body: balancedBody, priority: 1 },
-  worker: { amount: 0, body: workerBody, priority: 3 },
-  carrier: { amount: 0, body: carrierBody, priority: 2 },
-  builder: { amount: 0, body: balancedBody, priority: 4 },
-}
-
 const countCreeps = role => {
   var filteredCreeps = _.filter(Game.creeps, function(creep) {
     return creep.memory.role == role && creep.ticksToLive > 50
@@ -49,7 +35,7 @@ const countCreeps = role => {
   return filteredCreeps
 }
 
-const spawnCreepWithRole = role => {
+const spawnCreepWithRole = (role, targetState) => {
   // console.log(`roleToSpawn: ${role}`);
   // console.log(targetState[role].body);
   const result = Game.spawns['Spawn1'].spawnCreep(
@@ -69,7 +55,8 @@ const spawnCreepWithRole = role => {
   }
 }
 
-const spawnCreeps = () => {
+const spawnCreeps = targetState => {
+  console.log(Object.keys(targetState))
   const calculatedBody = creepBody(
     [WORK, CARRY, MOVE],
     Game.spawns['Spawn1'].room.energyCapacityAvailable
@@ -97,7 +84,7 @@ const spawnCreeps = () => {
     })
 
     // console.log(`roleToSpawn: ${roleToSpawn}`);
-    spawnCreepWithRole(roleToSpawn)
+    spawnCreepWithRole(roleToSpawn, targetState)
   }
 }
 
