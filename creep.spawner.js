@@ -41,42 +41,6 @@ const targetState = {
   builder: { amount: 0, body: balancedBody, priority: 4 },
 }
 
-const creepSpawner = {
-  run() {
-    const calculatedBody = creepBody(
-      [WORK, CARRY, MOVE],
-      Game.spawns['Spawn1'].room.energyCapacityAvailable
-    )
-
-    const neededRoles = Object.keys(targetState).filter(role => {
-      return countCreeps(role) < targetState[role].amount
-    })
-
-    const populationUpdate = `Population:${Object.keys(targetState).map(
-      role => {
-        if (countCreeps(role) > 0) {
-          return ` ${role}: ${countCreeps(role)}/${targetState[role].amount}`
-        }
-      }
-    )}`
-
-    const energyUpdate = `Energy: ${
-      Game.spawns['Spawn1'].room.energyAvailable
-    }/${Game.spawns['Spawn1'].room.energyCapacityAvailable}`
-
-    console.log(`${populationUpdate} ${energyUpdate}`)
-
-    if (neededRoles.length > 0) {
-      const roleToSpawn = neededRoles.reduce((a, b) => {
-        return targetState[a].priority < targetState[b].priority ? a : b
-      })
-
-      // console.log(`roleToSpawn: ${roleToSpawn}`);
-      spawnCreepWithRole(roleToSpawn)
-    }
-  },
-}
-
 const countCreeps = role => {
   var filteredCreeps = _.filter(Game.creeps, function(creep) {
     return creep.memory.role == role && creep.ticksToLive > 50
@@ -105,4 +69,36 @@ const spawnCreepWithRole = role => {
   }
 }
 
-module.exports = creepSpawner
+const spawnCreeps = () => {
+  const calculatedBody = creepBody(
+    [WORK, CARRY, MOVE],
+    Game.spawns['Spawn1'].room.energyCapacityAvailable
+  )
+
+  const neededRoles = Object.keys(targetState).filter(role => {
+    return countCreeps(role) < targetState[role].amount
+  })
+
+  const populationUpdate = `Population:${Object.keys(targetState).map(role => {
+    if (countCreeps(role) > 0) {
+      return ` ${role}: ${countCreeps(role)}/${targetState[role].amount}`
+    }
+  })}`
+
+  const energyUpdate = `Energy: ${Game.spawns['Spawn1'].room.energyAvailable}/${
+    Game.spawns['Spawn1'].room.energyCapacityAvailable
+  }`
+
+  console.log(`${populationUpdate} ${energyUpdate}`)
+
+  if (neededRoles.length > 0) {
+    const roleToSpawn = neededRoles.reduce((a, b) => {
+      return targetState[a].priority < targetState[b].priority ? a : b
+    })
+
+    // console.log(`roleToSpawn: ${roleToSpawn}`);
+    spawnCreepWithRole(roleToSpawn)
+  }
+}
+
+module.exports = spawnCreeps

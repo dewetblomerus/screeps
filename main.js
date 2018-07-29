@@ -1,13 +1,13 @@
-const creepSpawner = require('creep.spawner')
-const creepManager = require('creep.manager')
+const spawnCreeps = require('creep.spawner')
+const manageCreeps = require('creep.manager')
 const towerManager = require('tower.manager')
 const clearMemory = require('clearMemory')
 
 module.exports.loop = function() {
   clearMemory()
+  spawnCreeps()
+  manageCreeps()
 
-  creepSpawner.run()
-  creepManager.run()
   for (const name in Game.rooms) {
     //currentRoom is now the instance of the roomobject
     const currentRoom = Game.rooms[name]
