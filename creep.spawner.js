@@ -12,8 +12,6 @@ const creepBody = (priorityBody, energyBudget) => {
       body = [...body, part]
     }
   }
-  console.log(body)
-  console.log(`bodyCost: ${bodyCost(body)} / ${energyBudget}`)
   return body
 }
 
@@ -36,8 +34,6 @@ const countCreeps = role => {
 }
 
 const spawnCreepWithRole = (role, bodyPriority) => {
-  // console.log(`roleToSpawn: ${role}`);
-  // console.log(targetState[role].body);
   const result = Game.spawns['Spawn1'].spawnCreep(
     creepBody(bodyPriority, Game.spawns['Spawn1'].room.energyCapacityAvailable),
     `${role} ${Game.time}`,
@@ -48,12 +44,10 @@ const spawnCreepWithRole = (role, bodyPriority) => {
   if (_.isString(result)) {
     console.log('The name is: ' + result)
   } else {
-    // console.log('Spawn error: ' + result);
   }
 }
 
 const spawnCreeps = targetState => {
-  console.log(Object.keys(targetState))
   const calculatedBody = creepBody(
     [WORK, CARRY, MOVE],
     Game.spawns['Spawn1'].room.energyCapacityAvailable
@@ -80,7 +74,6 @@ const spawnCreeps = targetState => {
       return targetState[a].priority < targetState[b].priority ? a : b
     })
 
-    // console.log(`roleToSpawn: ${roleToSpawn}`);
     spawnCreepWithRole(roleToSpawn, targetState[roleToSpawn].body)
   }
 }
