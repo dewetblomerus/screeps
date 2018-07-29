@@ -35,14 +35,11 @@ const countCreeps = role => {
   return filteredCreeps
 }
 
-const spawnCreepWithRole = (role, targetState) => {
+const spawnCreepWithRole = (role, bodyPriority) => {
   // console.log(`roleToSpawn: ${role}`);
   // console.log(targetState[role].body);
   const result = Game.spawns['Spawn1'].spawnCreep(
-    creepBody(
-      targetState[role].body,
-      Game.spawns['Spawn1'].room.energyCapacityAvailable
-    ),
+    creepBody(bodyPriority, Game.spawns['Spawn1'].room.energyCapacityAvailable),
     `${role} ${Game.time}`,
     {
       memory: { role: role },
@@ -84,7 +81,7 @@ const spawnCreeps = targetState => {
     })
 
     // console.log(`roleToSpawn: ${roleToSpawn}`);
-    spawnCreepWithRole(roleToSpawn, targetState)
+    spawnCreepWithRole(roleToSpawn, targetState[roleToSpawn].body)
   }
 }
 
