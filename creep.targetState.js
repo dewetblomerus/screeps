@@ -1,4 +1,4 @@
-const workerBody = [WORK, WORK, WORK, CARRY, MOVE]
+const workerBody = [WORK, WORK, CARRY, MOVE]
 
 const balancedBody = [WORK, CARRY, MOVE]
 
@@ -35,18 +35,16 @@ const useContainers = () => {
     }
   }
 
+  console.log('returningDefault')
   return {
-    upgrader: { amount: 5, body: balancedBody, priority: 1 },
-    worker: { amount: 0, body: workerBody, priority: 3 },
-    carrier: { amount: 0, body: carrierBody, priority: 2 },
+    worker: { amount: 2, body: workerBody, priority: 2 },
+    carrier: { amount: 2, body: carrierBody, priority: 1 },
     builder: { amount: 0, body: balancedBody, priority: 4 },
+    upgrader: { amount: 5, body: balancedBody, priority: 5 },
   }
 }
 
 const targetState = () => {
-  let state = {}
-  // console.log(building())
-
   if (containersAvailable()) {
     console.log('containersAvailable')
     return useContainers()
