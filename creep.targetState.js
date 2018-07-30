@@ -53,13 +53,16 @@ const useContainers = () => {
   }
 }
 
+const startState = {
+  harvester: { amount: 4, body: balancedBody, priority: 0 },
+  upgrader: { amount: 3, body: balancedBody, priority: 1 },
+}
+
 const targetState = () => {
+  console.log('inside targetState')
   if (startingOut(creepsInRoom())) {
     console.log('startingOut')
-    return {
-      harvester: { amount: 4, body: balancedBody, priority: 0 },
-      upgrader: { amount: 3, body: balancedBody, priority: 1 },
-    }
+    return startState
   }
 
   if (containersAvailable()) {
@@ -76,7 +79,7 @@ const targetState = () => {
     }
   }
 
-  const energyCapacity = Game.spawns['Spawn1'].room.energyCapacityAvailable
+  return startState
 }
 
 module.exports = targetState
