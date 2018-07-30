@@ -1,3 +1,4 @@
+const sourceIndex = 1
 const sourceTypes = [STRUCTURE_CONTAINER]
 
 const sources = creep => {
@@ -18,6 +19,11 @@ const getSource = creep => {
 
   // creep.memory.source = newSource.id
   return newSource
+}
+
+const chooseSource = creep => {
+  const sources = creep.room.find(FIND_SOURCES)
+  return sources[sourceIndex]
 }
 
 const harvest = creep => {
@@ -90,11 +96,18 @@ var roleBuilder = {
         }
       }
     } else {
-      const source = getSource(creep)
-      // console.log(source);
-      if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-        // console.log('not in range');
-        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
+      if (creep.room.storage) {
+        const source = getSource(creep)
+        // console.log(source);
+        if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+          // console.log('not in range');
+          creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
+        }
+      } else {
+        const source = chooseSource(creep)
+        if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
+        }
       }
     }
   },
