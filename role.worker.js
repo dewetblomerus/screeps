@@ -65,12 +65,12 @@ var roleWorker = {
     }
 
     if (creep.memory.depositing) {
-      // console.log(`${creep.name} finding structures`);
+      // console.log(`${creep.name} finding structures`)
       let destination = chooseDestination(creep)
       if (destination) {
         // console.log('there is a target');
         if (creep.transfer(destination, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          console.log(`Worker out of range: ${target}`)
+          console.log(`Worker out of range: ${destination}`)
           const result = creep.moveTo(destination, {
             visualizePathStyle: { stroke: '#ffffff' },
           })

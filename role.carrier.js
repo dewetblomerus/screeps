@@ -95,7 +95,6 @@ const chooseTarget = creep => {
   const structureType = chooseStructureType(creep)
 
   if (structureType == STRUCTURE_STORAGE) {
-    console.log('it is a storage')
     return creep.room.storage
   }
 

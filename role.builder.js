@@ -12,7 +12,7 @@ const sources = creep => {
   })
 }
 
-const getSource = creep => {
+const chooseSourceBuilding = creep => {
   const newSource = sources(creep).sort((a, b) => {
     return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b)
   })[0]
@@ -96,12 +96,18 @@ var roleBuilder = {
         }
       }
     } else {
-      if (creep.room.storage) {
-        const source = getSource(creep)
+      const sourceBuilding = chooseSourceBuilding(creep)
+      // if (creep.room.storage) {
+      if (sourceBuilding) {
+        // const source = getSource(creep)
         // console.log(source);
-        if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        if (
+          creep.withdraw(sourceBuilding, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+        ) {
           // console.log('not in range');
-          creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
+          creep.moveTo(sourceBuilding, {
+            visualizePathStyle: { stroke: '#ffaa00' },
+          })
         }
       } else {
         const source = chooseSource(creep)
