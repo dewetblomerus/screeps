@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const buildBody = require('creep.buildBody')
 
 const countCreepsInRoom = () => {
   const all = true
@@ -9,43 +10,6 @@ const countCreepsInRoom = () => {
   return allCreeps
 }
 
-const creepBody = (priorityBody, energyBudget) => {
-  console.log(`energyBudget: ${energyBudget}`)
-  let body = priorityBody
-  const realisticBudget = energyBudget => {
-    if (energyBudget > 2000) {
-      return 2000
-    } else {
-      return energyBudget
-    }
-  }
-
-  const budget = realisticBudget(energyBudget)
-  console.log(`realisticBudget: ${budget}`)
-
-  while (bodyCost(body) + bodyCost(priorityBody) <= budget) {
-    body = [...body, ...priorityBody]
-  }
-
-  for (part of priorityBody) {
-    if (bodyCost(body) + bodyPartCost[part] <= budget) {
-      body = [...body, part]
-    }
-  }
-  console.log(`body: ${body}`)
-  return body
-}
-
-const bodyPartCost = {
-  work: 100,
-  carry: 50,
-  move: 50,
-}
-
-const bodyCost = body => {
-  return body.reduce((prev, bodyPart) => prev + bodyPartCost[bodyPart], 0)
-}
-
 const countCreeps = role => {
   var filteredCreeps = _.filter(Game.creeps, function(creep) {
     return creep.memory.role == role && creep.ticksToLive > 50
@@ -54,16 +18,8 @@ const countCreeps = role => {
   return filteredCreeps
 }
 
-const bodyBudget = () => {
-  if (countCreepsInRoom() < 4) {
-    return Game.spawns['Spawn1'].room.energyAvailable
-  }
-
-  return Game.spawns['Spawn1'].room.energyCapacityAvailable
-}
-
 const spawnCreepWithRole = (role, bodyPriority) => {
-  const builtBody = creepBody(bodyPriority, bodyBudget())
+  const builtBody = buildBody(bodyPriority)
 
   const result = Game.spawns['Spawn1'].spawnCreep(
     builtBody,
