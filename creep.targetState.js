@@ -32,9 +32,9 @@ const containersAvailable = () => {
 }
 
 const useContainers = () => {
-  console.log('using containers')
+  // console.log('using containers')
   if (building()) {
-    console.log('building')
+    // console.log('building')
     return {
       worker: { amount: 2, body: workerBody, priority: 0 },
       carrier: { amount: 2, body: carrierBody, priority: 1 },
@@ -43,7 +43,7 @@ const useContainers = () => {
     }
   }
 
-  console.log('returningDefault')
+  // console.log('returningDefault')
   return {
     worker: { amount: 2, body: workerBody, priority: 0 },
     carrier: { amount: 2, body: carrierBody, priority: 1 },
@@ -57,9 +57,9 @@ const startState = {
 }
 
 const targetState = () => {
-  console.log('inside targetState')
+  // console.log('inside targetState')
   if (startingOut(creepsInRoom())) {
-    console.log('startingOut')
+    // console.log('startingOut')
     return {
       harvester: { amount: 4, body: balancedBody, priority: 0 },
       upgrader: { amount: 1, body: balancedBody, priority: 1 },
@@ -67,12 +67,12 @@ const targetState = () => {
   }
 
   if (containersAvailable()) {
-    console.log('containersAvailable')
+    // console.log('containersAvailable')
     return useContainers()
   }
 
   if (building()) {
-    console.log('building')
+    // console.log('building')
     return {
       harvester: { amount: 2, body: balancedBody, priority: 0 },
       upgrader: { amount: 1, body: balancedBody, priority: 1 },

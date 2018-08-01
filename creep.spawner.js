@@ -28,7 +28,6 @@ const spawnCreepWithRole = (role, bodyPriority) => {
       memory: { role: role },
     }
   )
-  console.log(result)
   if (_.isString(result)) {
     console.log('The name is: ' + result)
   } else {

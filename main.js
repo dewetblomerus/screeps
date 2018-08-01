@@ -3,8 +3,11 @@ const manageCreeps = require('creep.manager')
 const towerManager = require('tower.manager')
 const clearMemory = require('clearMemory')
 const targetState = require('creep.targetState')
+const weighRoles = require('weighRoles')
 
 module.exports.loop = function() {
+  const room = Game.spawns['Spawn1'].room
+  weighRoles(room)
   clearMemory()
   spawnCreeps(targetState())
   manageCreeps()

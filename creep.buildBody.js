@@ -26,7 +26,6 @@ const bodyBudget = () => {
 }
 
 const buildBody = priorityBody => {
-  console.log(`bodyBudget(): ${bodyBudget()}`)
   let body = priorityBody
   const realisticBudget = () => {
     if (bodyBudget() > 600) {
