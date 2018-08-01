@@ -1,7 +1,5 @@
 const workerBody = [WORK, WORK, CARRY, MOVE]
-
 const balancedBody = [WORK, CARRY, MOVE]
-
 const carrierBody = [CARRY, MOVE]
 
 const creepsInRoom = () => {
@@ -49,13 +47,13 @@ const useContainers = () => {
   return {
     worker: { amount: 2, body: workerBody, priority: 0 },
     carrier: { amount: 2, body: carrierBody, priority: 1 },
-    upgrader: { amount: 5, body: balancedBody, priority: 2 },
+    upgrader: { amount: 1, body: balancedBody, priority: 2 },
   }
 }
 
 const startState = {
   harvester: { amount: 4, body: balancedBody, priority: 0 },
-  upgrader: { amount: 3, body: balancedBody, priority: 1 },
+  upgrader: { amount: 1, body: balancedBody, priority: 1 },
 }
 
 const targetState = () => {
