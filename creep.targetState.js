@@ -60,7 +60,10 @@ const targetState = () => {
   console.log('inside targetState')
   if (startingOut(creepsInRoom())) {
     console.log('startingOut')
-    return startState
+    return {
+      harvester: { amount: 4, body: balancedBody, priority: 0 },
+      upgrader: { amount: 1, body: balancedBody, priority: 1 },
+    }
   }
 
   if (containersAvailable()) {
@@ -77,7 +80,10 @@ const targetState = () => {
     }
   }
 
-  return startState
+  return {
+    harvester: { amount: 4, body: balancedBody, priority: 0 },
+    upgrader: { amount: 1, body: balancedBody, priority: 1 },
+  }
 }
 
 module.exports = targetState
