@@ -75,17 +75,12 @@ const getTarget = creep => {
 const setTarget = creep => {
   if (creep.memory.target) {
     target = Game.getObjectById(creep.memory.target)
-    // console.log(target);
-    if (target.structureType == STRUCTURE_STORAGE) {
-      return
-    }
-
-    if (target.energy < target.energyCapacity) {
-      return
-    } else {
-      // console.log('target is already full');
-    }
   }
+
+  if (target.energy < target.energyCapacity) {
+    return
+  }
+
   if (chooseTarget(creep)) {
     creep.memory.target = chooseTarget(creep).id
   }
@@ -96,10 +91,6 @@ const chooseTarget = creep => {
 
   if (structureType == STRUCTURE_STORAGE) {
     return creep.room.storage
-  }
-
-  if (structureType == 'sourceContainer') {
-    console.log('it is a sourceContainer')
   }
 
   sortedTargetsRange = structuresOfType(creep, structureType).sort((a, b) => {
