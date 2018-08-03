@@ -85,7 +85,7 @@ let roles = {
 const weighRoles = room => {
   // console.log(sourceContainers(room))
 
-  console.log(energyInSourceContainers(room))
+  // console.log(energyInSourceContainers(room))
 
   // console.log('creepsInRoom:')
   // console.log(countCreepsInRoom())

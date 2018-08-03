@@ -1,13 +1,39 @@
 const sourceIndex = 1
+const sourceStructureTypes = [
+  STRUCTURE_CONTAINER,
+  STRUCTURE_STORAGE,
+  STRUCTURE_LINK,
+]
 
 const chooseSource = creep => {
   const sources = creep.room.find(FIND_SOURCES)
   return sources[sourceIndex]
 }
 
+const assignSourceStructure = creep => {
+  sourceStructures = creep.room.find(FIND_STRUCTURES, {
+    filter: s => sourceStructureTypes.includes(s.structureType),
+  })
+
+  closeSourceStructures = creep.room.controller.pos.findInRange(
+    sourceStructures,
+    10
+  )
+
+  closest = creep.room.controller.pos.findClosestByRange(closeSourceStructures)
+
+  if (closest) {
+    creep.memory.sourceStructure = closest.id
+  }
+}
+
 var roleUpgrader = {
   /** @param {Creep} creep **/
   run: function(creep) {
+    if (!creep.memory.sourceStructure) {
+      console.log('I have no sourceStructure')
+      assignSourceStructure(creep)
+    }
     if (creep.memory.upgrading && creep.carry.energy == 0) {
       creep.memory.upgrading = false
       // console.log(`${creep.name} is now harvesting`);
@@ -31,12 +57,15 @@ var roleUpgrader = {
         })
       }
     } else {
-      if (creep.room.storage) {
-        const source = creep.room.storage
-        // console.log(`upgrader withdrawing from: ${source}`);
-        if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+      if (Game.getObjectById(creep.memory.sourceStructure)) {
+        sourceStructure = Game.getObjectById(creep.memory.sourceStructure)
+        if (
+          creep.withdraw(sourceStructure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+        ) {
           // console.log('not in range');
-          creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
+          creep.moveTo(sourceStructure, {
+            visualizePathStyle: { stroke: '#ffaa00' },
+          })
         }
       } else {
         const source = chooseSource(creep)
