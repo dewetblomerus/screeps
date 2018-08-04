@@ -49,7 +49,7 @@ const spawnCreeps = targetState => {
     Game.spawns['Spawn1'].room.energyCapacityAvailable
   }`
 
-  console.log(`${populationUpdate} ${energyUpdate}`)
+  // console.log(`${populationUpdate} ${energyUpdate}`)
 
   if (neededRoles.length > 0) {
     const roleToSpawn = neededRoles.reduce((a, b) => {
