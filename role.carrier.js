@@ -50,7 +50,9 @@ const chooseSource = creep => {
   const newSource = creep.pos.findClosestByRange(sourceStructures(creep))
   // console.log(`newSource: ${newSource}`)
 
-  creep.memory.source = newSource.id || null
+  if (newSource) {
+    creep.memory.source = newSource.id
+  }
   return newSource
 }
 

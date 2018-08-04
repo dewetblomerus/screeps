@@ -32,18 +32,8 @@ const chooseSource = creep => {
   return untargetedSources[0]
 }
 
-const chooseDestination = creep => {
-  // console.log(targets(creep));
-  const sortedTargetsRange = targets(creep).sort((a, b) => {
-    return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b)
-  })
-
-  // console.log(`chooseDestination: ${sortedTargetsRange[0]}`);
-  return sortedTargetsRange[0]
-}
-
-const targets = creep => {
-  return creep.room.find(FIND_STRUCTURES, {
+const chooseTarget = creep => {
+  return creep.pos.findClosestByRange(FIND_STRUCTURES, {
     filter: structure => {
       return targetTypes.includes(structure.structureType)
     },
@@ -66,12 +56,12 @@ var roleWorker = {
 
     if (creep.memory.depositing) {
       // console.log(`${creep.name} finding structures`)
-      let destination = chooseDestination(creep)
-      if (destination) {
+      let target = chooseTarget(creep)
+      if (target) {
         // console.log('there is a target');
-        if (creep.transfer(destination, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-          console.log(`Worker out of range: ${destination}`)
-          const result = creep.moveTo(destination, {
+        if (creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+          console.log(`Worker out of range: ${target}`)
+          const result = creep.moveTo(target, {
             visualizePathStyle: { stroke: '#ffffff' },
           })
           console.log(result)
