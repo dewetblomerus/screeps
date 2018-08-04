@@ -1,3 +1,5 @@
+const structureUtils = require('structure.utils')
+
 const minEnergyToMove = 300
 const targetPriorities = {
   extension: { slug: STRUCTURE_EXTENSION, priority: 0 },
@@ -15,7 +17,6 @@ const targetTypes = [
   STRUCTURE_TOWER,
   STRUCTURE_STORAGE,
   STRUCTURE_CONTAINER,
-  STRUCTURE_LINK,
 ]
 const storeTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE]
 const sourceTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK]
@@ -32,39 +33,24 @@ const containsEnergy = structure => {
   }
 }
 
-const isSourceStructure = structure => {
-  // console.log(structure.structureType)
-  if (structure.structureType === STRUCTURE_CONTAINER) {
-    console.log(
-      `the Container is a source structure${structure.pos.findInRange(
-        FIND_SOURCES,
-        2
-      ).length > 0}`
-    )
-    return structure.pos.findInRange(FIND_SOURCES, 2).length > 0
-  }
-
-  return true
-}
-
 const sourceStructures = creep => {
   return creep.room.find(FIND_STRUCTURES, {
     filter: structure => {
       return (
         sourceTypes.includes(structure.structureType) &&
         containsMinEnergy(structure) &&
-        isSourceStructure(structure)
+        structureUtils.isSourceStructure(structure)
       )
     },
   })
 }
 
 const chooseSource = creep => {
-  console.log(`allSourceStructures ${sourceStructures(creep)}`)
+  // console.log(`allSourceStructures ${sourceStructures(creep)}`)
   const newSource = creep.pos.findClosestByRange(sourceStructures(creep))
   // console.log(`newSource: ${newSource}`)
 
-  creep.memory.source = newSource.id
+  creep.memory.source = newSource.id || null
   return newSource
 }
 
@@ -103,6 +89,7 @@ const getTarget = creep => {
   if (creep.memory.target) {
     // console.log('it already has a target')
     target = Game.getObjectById(creep.memory.target)
+    // console.log(`target: ${target}`)
   }
 
   if (structureFull(target)) {
@@ -133,7 +120,7 @@ const chooseTarget = creep => {
   }
 
   if (structureType == STRUCTURE_CONTAINER) {
-    console.log('target is a container')
+    // console.log('target is a container')
     return creep.pos.findClosestByRange(destinationContainers(creep.room))
   }
 
@@ -146,6 +133,7 @@ const chooseTarget = creep => {
 }
 
 const structureFull = structure => {
+  // console.log(structure)
   if (storeTypes.includes(structure.structureType)) {
     return structure.store[RESOURCE_ENERGY] === structure.storeCapacity
   }

@@ -1,4 +1,4 @@
-const targetTypes = [STRUCTURE_CONTAINER]
+const targetTypes = [STRUCTURE_CONTAINER, STRUCTURE_LINK]
 // const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
 
 const setSource = creep => {

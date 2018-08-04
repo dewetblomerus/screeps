@@ -31,6 +31,15 @@ const containersAvailable = () => {
   return containers.length > 1
 }
 
+const linksAvailable = () => {
+  const links = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
+    filter: structure => {
+      return structure.structureType === STRUCTURE_LINK
+    },
+  })
+  return links.length > 1
+}
+
 const useContainers = () => {
   // console.log('using containers')
   if (building()) {
@@ -47,6 +56,26 @@ const useContainers = () => {
   return {
     worker: { amount: 2, body: workerBody, priority: 0 },
     carrier: { amount: 2, body: carrierBody, priority: 1 },
+    upgrader: { amount: 1, body: balancedBody, priority: 2 },
+  }
+}
+
+const useLinks = () => {
+  // console.log('using containers')
+  if (building()) {
+    // console.log('building')
+    return {
+      worker: { amount: 2, body: workerBody, priority: 0 },
+      carrier: { amount: 1, body: carrierBody, priority: 1 },
+      upgrader: { amount: 1, body: balancedBody, priority: 2 },
+      builder: { amount: 2, body: balancedBody, priority: 4 },
+    }
+  }
+
+  // console.log('returningDefault')
+  return {
+    worker: { amount: 2, body: workerBody, priority: 0 },
+    carrier: { amount: 1, body: carrierBody, priority: 1 },
     upgrader: { amount: 1, body: balancedBody, priority: 2 },
   }
 }
@@ -69,6 +98,11 @@ const targetState = () => {
   if (containersAvailable()) {
     // console.log('containersAvailable')
     return useContainers()
+  }
+
+  if (linksAvailable()) {
+    // console.log('containersAvailable')
+    return useLinks()
   }
 
   if (building()) {
