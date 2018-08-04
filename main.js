@@ -12,9 +12,8 @@ module.exports.loop = function() {
   spawnCreeps(targetState())
   manageCreeps()
 
-  for (const name in Game.rooms) {
-    const currentRoom = Game.rooms[name]
-    const currentRoomName = currentRoom.name
-    towerManager.run(currentRoomName)
+  for (const roomName in Game.rooms) {
+    const room = Game.rooms[roomName]
+    towerManager.run(room)
   }
 }

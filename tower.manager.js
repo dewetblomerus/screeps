@@ -1,16 +1,10 @@
 var towerManager = {
-  run(roomName) {
-    // const tower = Game.getObjectById('5b3b0f61a36c2f5903b92cd4');
-    const hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS)
-    const towers = Game.rooms[roomName].find(FIND_MY_STRUCTURES, {
+  run(room) {
+    const towers = room.find(FIND_MY_STRUCTURES, {
       filter: { structureType: STRUCTURE_TOWER },
     })
 
-    // console.log(`towers: ${towers}`);
-    for (const towerDynamic of towers) {
-      // console.log(`towerDynamic: ${towerDynamic}`);
-      // const tower = Game.getObjectById('5b41a75be18cc24347f2309b');
-      const tower = towerDynamic
+    for (const tower of towers) {
       if (tower) {
         const closestDamagedStructure = tower.pos.findClosestByRange(
           FIND_STRUCTURES,
@@ -38,6 +32,7 @@ var towerManager = {
           console.log(`healing: ${damagedCreep}`)
           tower.heal(damagedCreep)
         } else if (closestDamagedStructure) {
+          // console.log(`repairing: ${closestDamagedStructure}`)
           tower.repair(closestDamagedStructure)
         }
       }
