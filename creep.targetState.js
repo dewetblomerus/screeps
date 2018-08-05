@@ -1,7 +1,3 @@
-const workerBody = [WORK, WORK, CARRY, MOVE]
-const balancedBody = [WORK, CARRY, MOVE]
-const carrierBody = [CARRY, MOVE]
-
 const creepsInRoom = () => {
   const all = true
   var filteredCreeps = _.filter(Game.creeps, function(all) {
@@ -45,18 +41,18 @@ const useContainers = () => {
   if (building()) {
     // console.log('building')
     return {
-      worker: { amount: 2, body: workerBody, priority: 0 },
-      carrier: { amount: 2, body: carrierBody, priority: 1 },
-      upgrader: { amount: 1, body: balancedBody, priority: 2 },
-      builder: { amount: 2, body: balancedBody, priority: 4 },
+      worker: { amount: 2, priority: 0 },
+      carrier: { amount: 2, priority: 1 },
+      upgrader: { amount: 1, priority: 2 },
+      builder: { amount: 2, priority: 4 },
     }
   }
 
   // console.log('returningDefault')
   return {
-    worker: { amount: 2, body: workerBody, priority: 0 },
-    carrier: { amount: 2, body: carrierBody, priority: 1 },
-    upgrader: { amount: 1, body: balancedBody, priority: 2 },
+    worker: { amount: 2, priority: 0 },
+    carrier: { amount: 2, priority: 1 },
+    upgrader: { amount: 1, priority: 2 },
   }
 }
 
@@ -65,24 +61,24 @@ const useLinks = () => {
   if (building()) {
     // console.log('building')
     return {
-      worker: { amount: 2, body: workerBody, priority: 0 },
-      carrier: { amount: 1, body: carrierBody, priority: 1 },
-      upgrader: { amount: 1, body: balancedBody, priority: 2 },
-      builder: { amount: 2, body: balancedBody, priority: 4 },
+      worker: { amount: 2, priority: 0 },
+      carrier: { amount: 1, priority: 1 },
+      upgrader: { amount: 1, priority: 2 },
+      builder: { amount: 2, priority: 4 },
     }
   }
 
   // console.log('returningDefault')
   return {
-    worker: { amount: 2, body: workerBody, priority: 0 },
-    carrier: { amount: 1, body: carrierBody, priority: 1 },
-    upgrader: { amount: 1, body: balancedBody, priority: 2 },
+    worker: { amount: 2, priority: 0 },
+    carrier: { amount: 1, priority: 1 },
+    upgrader: { amount: 1, priority: 2 },
   }
 }
 
 const startState = {
-  harvester: { amount: 4, body: balancedBody, priority: 0 },
-  upgrader: { amount: 1, body: balancedBody, priority: 1 },
+  harvester: { amount: 4, priority: 0 },
+  upgrader: { amount: 1, priority: 1 },
 }
 
 const targetState = () => {
@@ -90,8 +86,8 @@ const targetState = () => {
   if (startingOut(creepsInRoom())) {
     // console.log('startingOut')
     return {
-      harvester: { amount: 4, body: balancedBody, priority: 0 },
-      upgrader: { amount: 1, body: balancedBody, priority: 1 },
+      harvester: { amount: 4, priority: 0 },
+      upgrader: { amount: 1, priority: 1 },
     }
   }
 
@@ -108,15 +104,15 @@ const targetState = () => {
   if (building()) {
     // console.log('building')
     return {
-      harvester: { amount: 2, body: balancedBody, priority: 0 },
-      upgrader: { amount: 1, body: balancedBody, priority: 1 },
-      builder: { amount: 2, body: balancedBody, priority: 3 },
+      harvester: { amount: 2, priority: 0 },
+      upgrader: { amount: 1, priority: 1 },
+      builder: { amount: 2, priority: 3 },
     }
   }
 
   return {
-    harvester: { amount: 4, body: balancedBody, priority: 0 },
-    upgrader: { amount: 1, body: balancedBody, priority: 1 },
+    harvester: { amount: 4, priority: 0 },
+    upgrader: { amount: 1, priority: 1 },
   }
 }
 

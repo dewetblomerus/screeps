@@ -10,7 +10,7 @@ module.exports.loop = function() {
   const room = Game.spawns['Spawn1'].room
   weighRoles(room)
   clearMemory()
-  spawnCreeps(targetState())
+  spawnCreeps(targetState(), room)
   manageCreeps()
 
   for (const roomName in Game.rooms) {

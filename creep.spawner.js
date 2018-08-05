@@ -18,8 +18,8 @@ const countCreeps = role => {
   return filteredCreeps
 }
 
-const spawnCreepWithRole = (role, bodyPriority) => {
-  const builtBody = buildBody(bodyPriority)
+const spawnCreepWithRole = (role, room) => {
+  const builtBody = buildBody(role, room)
 
   const result = Game.spawns['Spawn1'].spawnCreep(
     builtBody,
@@ -34,7 +34,7 @@ const spawnCreepWithRole = (role, bodyPriority) => {
   }
 }
 
-const spawnCreeps = targetState => {
+const spawnCreeps = (targetState, room) => {
   const neededRoles = Object.keys(targetState).filter(role => {
     return countCreeps(role) < targetState[role].amount
   })
@@ -57,7 +57,7 @@ const spawnCreeps = targetState => {
     })
     console.log(roleToSpawn)
 
-    spawnCreepWithRole(roleToSpawn, targetState[roleToSpawn].body)
+    spawnCreepWithRole(roleToSpawn, room)
   }
 }
 
