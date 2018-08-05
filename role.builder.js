@@ -1,24 +1,13 @@
+const structureUtils = require('structure.utils')
 const sourceIndex = 1
-const sourceTypes = [STRUCTURE_CONTAINER]
-
-const sources = creep => {
-  return creep.room.find(FIND_STRUCTURES, {
-    filter: structure => {
-      return (
-        sourceTypes.includes(structure.structureType) &&
-        structure.store[RESOURCE_ENERGY] >= creep.carryCapacity
-      )
-    },
-  })
-}
 
 const chooseSourceBuilding = creep => {
-  const newSource = sources(creep).sort((a, b) => {
-    return creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b)
-  })[0]
+  sourceBuilding = creep.pos.findClosestByPath(
+    structureUtils.energyStructures(creep.room, creep.carryCapacity)
+  )
 
   // creep.memory.source = newSource.id
-  return newSource
+  return sourceBuilding
 }
 
 const chooseSource = creep => {
