@@ -6,6 +6,14 @@ const bodyPriorities = {
   builder: [[WORK, 2], [CARRY, 1], [MOVE, 1]],
 }
 
+const bodyBudgets = {
+  worker: 800,
+  carrier: 1000,
+  harvester: 1000,
+  upgrader: 2000,
+  builder: 1000,
+}
+
 const countCreepsInRoom = () => {
   const all = true
   var allCreeps = _.filter(Game.creeps, function(all) {
@@ -33,9 +41,9 @@ const bodyBudget = room => {
   return room.energyCapacityAvailable
 }
 
-const realisticBudget = room => {
-  if (bodyBudget(room) > 1000) {
-    return 1000
+const realisticBudget = (room, role) => {
+  if (bodyBudget(room) > bodyBudgets[role]) {
+    return bodyBudgets[role]
   } else {
     return bodyBudget(room)
   }
@@ -73,7 +81,7 @@ const nextBodyPart = ({ body, role, room }) => {
 }
 
 const buildBody = (role, room) => {
-  const budget = realisticBudget(room)
+  const budget = realisticBudget(room, role)
   let body = []
 
   while (
