@@ -35,7 +35,10 @@ const bodyCost = body => {
 
 const bodyBudget = room => {
   if (countCreepsInRoom() < 2) {
-    return room.energyAvailable
+    if (room.energyAvailable > 300) {
+      return room.energyAvailable
+    }
+    return 300
   }
 
   return room.energyCapacityAvailable
@@ -59,7 +62,7 @@ const countInBody = (body, bodyPart) => {
 const adjustPriority = (body, bodyPart, priority) => {
   normalizedPriority = priority * 10
   if (countInBody(body, bodyPart) === 0) {
-    return normalizedPriority
+    return normalizedPriority * 10
   }
   return normalizedPriority / countInBody(body, bodyPart)
 }
