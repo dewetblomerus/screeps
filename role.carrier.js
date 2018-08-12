@@ -1,6 +1,5 @@
-const structureUtils = require('structure.utils')
+const chooseSource = require('creep.chooseSource')
 
-const minEnergyToMove = 300
 const targetPriorities = {
   extension: { slug: STRUCTURE_EXTENSION, priority: 0 },
   spawn: { slug: STRUCTURE_SPAWN, priority: 1 },
@@ -19,42 +18,6 @@ const targetTypes = [
   STRUCTURE_CONTAINER,
 ]
 const storeTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE]
-const sourceTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK]
-
-const containsMinEnergy = structure => {
-  return containsEnergy(structure) > minEnergyToMove
-}
-
-const containsEnergy = structure => {
-  if (storeTypes.includes(structure.structureType)) {
-    return structure.store[RESOURCE_ENERGY]
-  } else {
-    return structure.energy
-  }
-}
-
-const sourceStructures = creep => {
-  return creep.room.find(FIND_STRUCTURES, {
-    filter: structure => {
-      return (
-        sourceTypes.includes(structure.structureType) &&
-        containsMinEnergy(structure) &&
-        structureUtils.isSourceStructure(structure)
-      )
-    },
-  })
-}
-
-const chooseSource = creep => {
-  // console.log(`allSourceStructures ${sourceStructures(creep)}`)
-  const newSource = creep.pos.findClosestByRange(sourceStructures(creep))
-  // console.log(`newSource: ${newSource}`)
-
-  if (newSource) {
-    creep.memory.source = newSource.id
-  }
-  return newSource
-}
 
 const chooseStructureType = creep => {
   structures = targetsNeedingEnergy(creep)
