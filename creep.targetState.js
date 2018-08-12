@@ -1,37 +1,29 @@
 const creepsInRoom = () => {
-  const all = true
-  var filteredCreeps = _.filter(Game.creeps, function(all) {
-    return all
-  }).length
+  const allCreepsCount = Object.keys(Game.creeps).length
+  console.log(`allCreepsCount: ${allCreepsCount}`)
 
-  return filteredCreeps
+  return allCreepsCount
 }
 
-const startingOut = creepsCount => {
-  return creepsCount < 3
-}
+const startingOut = creepsCount => creepsCount < 3
 
 const building = () => {
-  const constructionSites = Game.spawns['Spawn1'].room.find(
+  const constructionSites = Game.spawns.Spawn1.room.find(
     FIND_CONSTRUCTION_SITES
   )
   return constructionSites.length > 0
 }
 
 const containersAvailable = () => {
-  const containers = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
-    filter: structure => {
-      return structure.structureType === STRUCTURE_CONTAINER
-    },
+  const containers = Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
+    filter: structure => structure.structureType === STRUCTURE_CONTAINER,
   })
   return containers.length > 1
 }
 
 const linksAvailable = () => {
-  const links = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
-    filter: structure => {
-      return structure.structureType === STRUCTURE_LINK
-    },
+  const links = Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
+    filter: structure => structure.structureType === STRUCTURE_LINK,
   })
   return links.length > 1
 }
@@ -74,11 +66,6 @@ const useLinks = () => {
     carrier: { amount: 1, priority: 1 },
     upgrader: { amount: 1, priority: 2 },
   }
-}
-
-const startState = {
-  harvester: { amount: 4, priority: 0 },
-  upgrader: { amount: 1, priority: 1 },
 }
 
 const targetState = () => {

@@ -10,15 +10,13 @@ const bodyBudgets = {
   worker: 800,
   carrier: 1000,
   harvester: 1000,
-  upgrader: 2000,
+  upgrader: 1000,
   builder: 1000,
 }
 
 const countCreepsInRoom = () => {
-  const all = true
-  var allCreeps = _.filter(Game.creeps, function(all) {
-    return all
-  }).length
+  const allCreeps = Object.keys(Game.creeps).length
+  console.log(`allCreeps: ${allCreeps}`)
 
   return allCreeps
 }
@@ -29,9 +27,8 @@ const bodyPartCost = {
   move: 50,
 }
 
-const bodyCost = body => {
-  return body.reduce((prev, bodyPart) => prev + bodyPartCost[bodyPart], 0)
-}
+const bodyCost = body =>
+  body.reduce((prev, bodyPart) => prev + bodyPartCost[bodyPart], 0)
 
 const bodyBudget = room => {
   if (countCreepsInRoom() < 2) {
@@ -47,36 +44,32 @@ const bodyBudget = room => {
 const realisticBudget = (room, role) => {
   if (bodyBudget(room) > bodyBudgets[role]) {
     return bodyBudgets[role]
-  } else {
-    return bodyBudget(room)
   }
+  return bodyBudget(room)
 }
 
-const countInBody = (body, bodyPart) => {
-  return body.reduce(
-    (total, thisPart) => total + (thisPart === bodyPart ? 1 : 0),
-    0
-  )
-}
+const countInBody = (body, bodyPart) =>
+  body.reduce((total, thisPart) => total + (thisPart === bodyPart ? 1 : 0), 0)
 
 const adjustPriority = (body, bodyPart, priority) => {
-  normalizedPriority = priority * 10
+  const normalizedPriority = priority * 10
   if (countInBody(body, bodyPart) === 0) {
     return normalizedPriority * 10
   }
   return normalizedPriority / countInBody(body, bodyPart)
 }
 
-const nextBodyPart = ({ body, role, room }) => {
-  priorities = bodyPriorities[role]
+const nextBodyPart = ({ body, role }) => {
+  const priorities = bodyPriorities[role]
 
-  const currentPriorities = priorities.map(([bodyPart, priority]) => {
-    return [bodyPart, adjustPriority(body, bodyPart, priority)]
-  })
+  const currentPriorities = priorities.map(([bodyPart, priority]) => [
+    bodyPart,
+    adjustPriority(body, bodyPart, priority),
+  ])
 
-  console.log(`currentPriorities: ${currentPriorities}`)
+  // console.log(`currentPriorities: ${currentPriorities}`)
 
-  maxPriority = currentPriorities.reduce(
+  const maxPriority = currentPriorities.reduce(
     (max, priority) => (priority[1] > max[1] ? priority : max)
   )[0]
 
@@ -85,17 +78,16 @@ const nextBodyPart = ({ body, role, room }) => {
 
 const buildBody = (role, room) => {
   const budget = realisticBudget(room, role)
-  let body = []
+  const body = []
 
   while (
-    bodyCost([...body, nextBodyPart({ body: body, role: role, room: room })]) <=
-      budget &&
+    bodyCost([...body, nextBodyPart({ body, role, room })]) <= budget &&
     body.length < 50
   ) {
-    body.push(nextBodyPart({ body: body, role: role, room: room }))
+    body.push(nextBodyPart({ body, role, room }))
   }
 
-  console.log(body)
+  // console.log(body)
 
   return body
 }

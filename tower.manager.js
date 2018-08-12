@@ -1,4 +1,4 @@
-var towerManager = {
+const towerManager = {
   run(room) {
     const towers = room.find(FIND_MY_STRUCTURES, {
       filter: { structureType: STRUCTURE_TOWER },
@@ -11,25 +11,23 @@ var towerManager = {
           {
             filter: structure =>
               structure.hits < structure.hitsMax &&
-              structure != tower &&
-              structure.structureType != STRUCTURE_WALL,
+              structure !== tower &&
+              structure.structureType !== STRUCTURE_WALL,
           }
         )
         const closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
         const roomName = tower.room.name
 
         const damagedCreep = Game.rooms[roomName].find(FIND_MY_CREEPS, {
-          filter: creep => {
-            return creep.hits < creep.hitsMax
-          },
+          filter: creep => creep.hits < creep.hitsMax,
         })
 
         if (closestHostile) {
-          console.log('there is a hostile')
-          const result = tower.attack(closestHostile)
-          console.log(`attack result: ${result}`)
+          // console.log('there is a hostile')
+          tower.attack(closestHostile)
+          // console.log(`attack result: ${result}`)
         } else if (damagedCreep.name) {
-          console.log(`healing: ${damagedCreep}`)
+          // console.log(`healing: ${damagedCreep}`)
           tower.heal(damagedCreep)
         } else if (closestDamagedStructure) {
           // console.log(`repairing: ${closestDamagedStructure}`)

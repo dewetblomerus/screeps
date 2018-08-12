@@ -1,8 +1,9 @@
-const structureUtils = require('structure.utils')
+const structureUtils = require('./structure.utils')
+
 const sourceIndex = 1
 
 const chooseSourceBuilding = creep => {
-  sourceBuilding = creep.pos.findClosestByPath(
+  const sourceBuilding = creep.pos.findClosestByPath(
     structureUtils.energyStructures(creep.room, creep.carryCapacity)
   )
 
@@ -15,31 +16,17 @@ const chooseSource = creep => {
   return sources[sourceIndex]
 }
 
-const harvest = creep => {
-  source = chooseSource(creep)
-  if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
-    creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
-  }
-}
-
-const findConstruction = creep => {
-  return creep.room.find(FIND_CONSTRUCTION_SITES)[0]
-}
+const findConstruction = creep => creep.room.find(FIND_CONSTRUCTION_SITES)[0]
 
 const setTargetId = creep => {
   creep.memory.target = findConstruction(creep).id
   console.log(`builder setting target: ${creep.memory.target}`)
 }
 
-const inProgress = site => site.progress < site.progressTotal
+const doneHarvesting = creep =>
+  !creep.memory.building && creep.carry.energy === creep.carryCapacity
 
-const doneHarvesting = creep => {
-  return !creep.memory.building && creep.carry.energy == creep.carryCapacity
-}
-
-const doneBuilding = creep => {
-  return creep.memory.building && creep.carry.energy == 0
-}
+const doneBuilding = creep => creep.memory.building && creep.carry.energy === 0
 
 const chooseSite = creep => {
   if (Game.getObjectById(creep.memory.target)) {
@@ -48,9 +35,9 @@ const chooseSite = creep => {
   return findConstruction(creep)
 }
 
-var roleBuilder = {
-  /** @param {Creep} creep **/
-  run: function(creep) {
+const roleBuilder = {
+  /** @param {Creep} creep * */
+  run(creep) {
     if (doneBuilding(creep)) {
       creep.memory.building = false
       console.log('builder doneBuilding')
@@ -67,18 +54,18 @@ var roleBuilder = {
 
     if (creep.memory.building) {
       // console.log(`${target.progress}/${target.progressTotal}`);
-      let targets = creep.room.find(FIND_CONSTRUCTION_SITES)
-      let target = chooseSite(creep)
+      const targets = creep.room.find(FIND_CONSTRUCTION_SITES)
+      const target = chooseSite(creep)
       // console.log(`in progress: ${target}`);
       // console.log(`builder target: ${creep.memory.target}`);
       if (targets.length) {
-        if (creep.build(target) == ERR_NOT_IN_RANGE) {
+        if (creep.build(target) === ERR_NOT_IN_RANGE) {
           // target building code
           creep.moveTo(target, {
             // maxRooms: 1,
             visualizePathStyle: { stroke: '#ffffff' },
           })
-          //normal code
+          // normal code
           // creep.moveTo(targets[0], {
           //   visualizePathStyle: { stroke: '#ffffff' }
           // });
@@ -91,7 +78,7 @@ var roleBuilder = {
         // const source = getSource(creep)
         // console.log(source);
         if (
-          creep.withdraw(sourceBuilding, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE
+          creep.withdraw(sourceBuilding, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE
         ) {
           // console.log('not in range');
           creep.moveTo(sourceBuilding, {
@@ -100,7 +87,7 @@ var roleBuilder = {
         }
       } else {
         const source = chooseSource(creep)
-        if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
           creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
         }
       }

@@ -1,20 +1,19 @@
-const spawnCreeps = require('creep.spawner')
-const manageCreeps = require('creep.manager')
-const towerManager = require('tower.manager')
-const clearMemory = require('clearMemory')
-const targetState = require('creep.targetState')
-const weighRoles = require('weighRoles')
-const manageLinks = require('manageLinks')
+const spawnCreeps = require('./creep.spawner')
+const manageCreeps = require('./creep.manager')
+const towerManager = require('./tower.manager')
+const clearMemory = require('./clearMemory')
+const targetState = require('./creep.targetState')
+const weighRoles = require('./weighRoles')
+const manageLinks = require('./manageLinks')
 
-module.exports.loop = function() {
-  const room = Game.spawns['Spawn1'].room
-  weighRoles(room)
+module.exports.loop = () => {
   clearMemory()
-  spawnCreeps(targetState(), room)
   manageCreeps()
 
-  for (const roomName in Game.rooms) {
-    const room = Game.rooms[roomName]
+  const roomsArray = Object.values(Game.rooms)
+  for (const room of roomsArray) {
+    weighRoles(room)
+    spawnCreeps(targetState(), room)
     towerManager.run(room)
     manageLinks(room)
   }

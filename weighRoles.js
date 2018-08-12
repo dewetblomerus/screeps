@@ -3,78 +3,46 @@ const creepsInRoom = room => {
   return creeps
 }
 
-const countCreepsInRoom = room => {
-  return creepsInRoom(room).length
-}
+const countCreepsInRoom = room => creepsInRoom(room).length
 
-const startingOut = () => {
-  return Game.spawns['Spawn1'].room.controller.level < 2
-}
+const startingOut = () => Game.spawns.Spawn1.room.controller.level < 2
 
-const reboot = () => {
-  return countCreepsInRoom(Game.spawns['Spawn1'].room) < 2
-}
+const reboot = () => countCreepsInRoom(Game.spawns.Spawn1.room) < 2
 
 const building = () => {
-  const constructionSites = Game.spawns['Spawn1'].room.find(
+  const constructionSites = Game.spawns.Spawn1.room.find(
     FIND_CONSTRUCTION_SITES
   )
   return constructionSites.length > 0
 }
 
 const containersAvailable = () => {
-  const containers = Game.spawns['Spawn1'].room.find(FIND_STRUCTURES, {
-    filter: structure => {
-      return structure.structureType === STRUCTURE_CONTAINER
-    },
+  const containers = Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
+    filter: structure => structure.structureType === STRUCTURE_CONTAINER,
   })
   return containers.length > 1
 }
 
 const countCreeps = role => {
-  const filteredCreeps = _.filter(Game.creeps, function(creep) {
-    return creep.memory.role == role && creep.ticksToLive > 50
-  }).length
+  const filteredCreeps = _.filter(
+    Game.creeps,
+    creep => creep.memory.role === role && creep.ticksToLive > 50
+  ).length
 
   return filteredCreeps
 }
 
-const sourceContainers = room => {
-  return room.find(FIND_STRUCTURES, {
-    filter: s =>
-      s.structureType === STRUCTURE_CONTAINER &&
-      s.pos.findInRange(FIND_SOURCES, 2).length > 0,
-  })
-}
+const enoughBuilders = () => countCreeps('builder') > 1
 
-const energyInSourceContainers = room => {
-  return sourceContainers(room).reduce(
-    (total, container) => total + container.store[RESOURCE_ENERGY],
-    0
-  )
-}
+const enoughWorkers = () => countCreeps('worker') > 1
 
-const enoughBuilders = () => {
-  return countCreeps('builder') > 1
-}
+const enoughCarriers = () => countCreeps('carrier') > 1
 
-const enoughWorkers = () => {
-  return countCreeps('worker') > 1
-}
+const enoughHarvesters = () => countCreeps('harvester') > 1
 
-const enoughCarriers = () => {
-  return countCreeps('carrier') > 1
-}
+const enoughUpgraders = () => countCreeps('upgrader') > 1
 
-const enoughHarvesters = () => {
-  return countCreeps('harvester') > 1
-}
-
-const enoughUpgraders = () => {
-  return countCreeps('upgrader') > 1
-}
-
-let roles = {
+const roles = {
   builder: 0,
   carrier: 0,
   harvester: 0,
@@ -82,7 +50,7 @@ let roles = {
   worker: 0,
 }
 
-const weighRoles = room => {
+const weighRoles = () => {
   // console.log(sourceContainers(room))
 
   // console.log(energyInSourceContainers(room))
