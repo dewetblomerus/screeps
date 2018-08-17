@@ -1,4 +1,5 @@
 const chooseSource = require('./creep.chooseSource')
+const structureUtils = require('./structure.utils')
 
 const targetPriorities = {
   extension: { slug: STRUCTURE_EXTENSION, priority: 0 },
@@ -17,21 +18,12 @@ const targetTypes = [
   STRUCTURE_STORAGE,
   STRUCTURE_CONTAINER,
 ]
-const storeTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE]
-
-const structureFull = structure => {
-  // console.log(structure)
-  if (storeTypes.includes(structure.structureType)) {
-    return structure.store[RESOURCE_ENERGY] === structure.storeCapacity
-  }
-  return structure.energy === structure.energyCapacity
-}
 
 const targetsNeedingEnergy = creep =>
   creep.room.find(FIND_STRUCTURES, {
     filter: structure =>
       targetTypes.includes(structure.structureType) &&
-      !structureFull(structure),
+      !structureUtils.full(structure),
   })
 
 const chooseStructureType = creep => {

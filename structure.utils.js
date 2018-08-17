@@ -5,7 +5,6 @@ const RESOURCE_STRUCTURE_TYPES = [
   STRUCTURE_LINK,
   STRUCTURE_STORAGE,
 ]
-
 const STORE_STRUCTURE_TYPES = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE]
 
 const structureUtils = {
@@ -52,6 +51,14 @@ const structureUtils = {
         structureTypes.includes(structure.structureType) &&
         structureUtils.isUpgraderStructure(structure),
     })
+  },
+
+  full(structure) {
+    // console.log(structure)
+    if (STORE_STRUCTURE_TYPES.includes(structure.structureType)) {
+      return structure.store[RESOURCE_ENERGY] === structure.storeCapacity
+    }
+    return structure.energy === structure.energyCapacity
   },
 }
 
