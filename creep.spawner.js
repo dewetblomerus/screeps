@@ -47,7 +47,6 @@ const spawnCreeps = (targetState, room) => {
     const roleToSpawn = neededRoles.reduce(
       (a, b) => (targetState[a].priority < targetState[b].priority ? a : b)
     )
-    console.log(`roleToSpawn: ${roleToSpawn}`)
 
     spawnCreepWithRole(roleToSpawn, room)
   }

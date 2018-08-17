@@ -1,7 +1,5 @@
 const creepsInRoom = () => {
   const allCreepsCount = Object.keys(Game.creeps).length
-  console.log(`allCreepsCount: ${allCreepsCount}`)
-
   return allCreepsCount
 }
 

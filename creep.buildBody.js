@@ -16,8 +16,6 @@ const bodyBudgets = {
 
 const countCreepsInRoom = () => {
   const allCreeps = Object.keys(Game.creeps).length
-  console.log(`allCreeps: ${allCreeps}`)
-
   return allCreeps
 }
 
