@@ -8,6 +8,14 @@ const RESOURCE_STRUCTURE_TYPES = [
 const STORE_STRUCTURE_TYPES = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE]
 
 const structureUtils = {
+  destinationContainers(room) {
+    return room.find(FIND_STRUCTURES, {
+      filter: s =>
+        s.structureType === STRUCTURE_CONTAINER &&
+        s.pos.findInRange(FIND_SOURCES, 2).length === 0,
+    })
+  },
+
   energyStructures(room, minEnergy = 50) {
     return room.find(FIND_MY_STRUCTURES, {
       filter: structure =>

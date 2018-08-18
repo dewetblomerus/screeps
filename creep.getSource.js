@@ -5,6 +5,41 @@ const minEnergyToMove = 300
 const storeTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE]
 const sourceTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK]
 
+const sourceStructurePriorities = [
+  ['container', 10],
+  ['link', 10],
+  ['storage', 10],
+]
+
+const notEnoughStorage = room => room.storage.store[RESOURCE_ENERGY] < 50000
+
+const prioritizeUpgrading = room => {
+  const upgraderStructure = structureUtils.upgraderStructures(room)[0]
+
+  if (upgraderStructure.structureType === STRUCTURE_LINK) {
+    return (
+      upgraderStructure.energy < 500 &&
+      room.storage.store[RESOURCE_ENERGY] > 5000
+    )
+  }
+
+  return false
+}
+
+const adjustPriority = (structureType, priority, room) => {
+  if (structureType === 'storage') {
+    if (notEnoughStorage(room)) {
+      return priority - 1
+    }
+
+    if (prioritizeUpgrading(room)) {
+      return priority + 1
+    }
+  }
+
+  return priority
+}
+
 const containsEnergy = structure => {
   if (storeTypes.includes(structure.structureType)) {
     return structure.store[RESOURCE_ENERGY]
@@ -14,6 +49,13 @@ const containsEnergy = structure => {
 
 const containsMinEnergy = structure =>
   containsEnergy(structure) > minEnergyToMove
+
+const adjustedPriorities = creep => {
+  return sourceStructurePriorities.map(([structureType, priority]) => [
+    structureType,
+    adjustPriority(structureType, priority, creep.room),
+  ])
+}
 
 const sourceStructures = creep => {
   if (structureUtils.storageLink(creep.room)) {
@@ -39,18 +81,41 @@ const anyStructures = creep =>
       containsMinEnergy(structure),
   })
 
+const chooseStructureType = creep => {
+  const structures = anyStructures(creep)
+  const structureTypesWithEnergy = structures.map(
+    structure => structure.structureType
+  )
+
+  const relevantPriorities = adjustedPriorities(creep).filter(
+    ([structureType]) => structureTypesWithEnergy.includes(structureType)
+  )
+
+  if (relevantPriorities.length > 0) {
+    const structureType = relevantPriorities.reduce(
+      (a, b) => (a[1] > b[1] ? a : b)
+    )[0]
+
+    return structureType
+  }
+  return STRUCTURE_STORAGE
+}
+
 const chooseSource = creep => {
-  if (creep.room.storage) {
-    if (creep.room.storage.store[RESOURCE_ENERGY] > 990000) {
-      console.log('it has over 990000')
-      return creep.room.storage
-    }
+  const structureType = chooseStructureType(creep)
+  if (structureType === STRUCTURE_STORAGE) {
+    return creep.room.storage
   }
 
-  const sourceStr = sourceStructures(creep)
-  const structures = sourceStr.length > 0 ? sourceStr : anyStructures(creep)
-  const newSource = creep.pos.findClosestByRange(structures)
-  return newSource
+  if (structureType === STRUCTURE_CONTAINER) {
+    return creep.pos.findClosestByRange(
+      structureUtils.destinationContainers(creep.room)
+    )
+  }
+
+  if (structureType === STRUCTURE_LINK) {
+    return structureUtils.storageLink(creep.room)
+  }
 }
 
 const getSource = creep => chooseSource(creep)
