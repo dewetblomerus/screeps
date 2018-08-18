@@ -1,15 +1,15 @@
 const structureUtils = require('./structure.utils')
 
+const notEnoughStorage = (room, upgraderLink) =>
+  room.storage.store[RESOURCE_ENERGY] < 10000 || upgraderLink.energy > 700
+
 const linkNeedingEnergy = room => {
   const upgraderLink = structureUtils.upgraderStructures(room, [
     STRUCTURE_LINK,
   ])[0]
 
   if (room.storage) {
-    if (
-      room.storage.store[RESOURCE_ENERGY] < 10000 ||
-      upgraderLink.energy > 700
-    ) {
+    if (notEnoughStorage(room, upgraderLink)) {
       return structureUtils.storageLink(room)
     }
   }

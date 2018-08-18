@@ -1,14 +1,13 @@
 const structureUtils = require('./structure.utils')
 
-const targetPriorities = {
-  extension: { slug: STRUCTURE_EXTENSION, priority: 0 },
-  spawn: { slug: STRUCTURE_SPAWN, priority: 1 },
-  tower: { slug: STRUCTURE_TOWER, priority: 2 },
-  // container: { slug: 'sourceContainer', priority: 4 },
-  link: { slug: STRUCTURE_LINK, priority: 4 },
-  container: { slug: STRUCTURE_CONTAINER, priority: 5 },
-  storage: { slug: STRUCTURE_STORAGE, priority: 6 },
-}
+const targetPriorities = [
+  ['extension', 7],
+  ['spawn', 6],
+  ['tower', 5],
+  ['link', 3],
+  ['container', 2],
+  ['storage', 1],
+]
 
 const targetTypes = [
   STRUCTURE_EXTENSION,
@@ -18,6 +17,25 @@ const targetTypes = [
   STRUCTURE_CONTAINER,
   STRUCTURE_LINK,
 ]
+
+const notEnoughStorage = room => room.storage.store[RESOURCE_ENERGY] < 50000
+
+const adjustPriority = (structureType, priority, room) => {
+  if (structureType === 'storage') {
+    if (notEnoughStorage(room)) {
+      return 4
+    }
+  }
+
+  return priority
+}
+
+const adjustedPriorities = creep => {
+  return targetPriorities.map(([structureType, priority]) => [
+    structureType,
+    adjustPriority(structureType, priority, creep.room),
+  ])
+}
 
 const targetsNeedingEnergy = creep =>
   creep.room.find(FIND_STRUCTURES, {
@@ -31,12 +49,15 @@ const chooseStructureType = creep => {
   const structureTypesNeedingEnergy = structures.map(
     structure => structure.structureType
   )
-  if (structureTypesNeedingEnergy.length > 0) {
-    // console.log('there are targets');
-    const structureType = structureTypesNeedingEnergy.reduce(
-      (a, b) =>
-        targetPriorities[a].priority < targetPriorities[b].priority ? a : b
-    )
+
+  const relevantPriorities = adjustedPriorities(creep).filter(
+    ([structureType]) => structureTypesNeedingEnergy.includes(structureType)
+  )
+
+  if (relevantPriorities.length > 0) {
+    const structureType = relevantPriorities.reduce(
+      (a, b) => (a[1] > b[1] ? a : b)
+    )[0]
 
     return structureType
   }

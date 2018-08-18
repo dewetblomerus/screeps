@@ -53,6 +53,13 @@ const loaded = room => {
   return false
 }
 
+const buffer = room => {
+  if (room.storage) {
+    return room.storage.store[RESOURCE_ENERGY] > 1000
+  }
+  return false
+}
+
 const useLinks = room => {
   // console.log('using containers')
   if (building()) {
@@ -84,6 +91,13 @@ const useLinks = room => {
 const targetState = room => {
   // console.log('inside targetState')
   if (startingOut(creepsInRoom())) {
+    if (buffer(room)) {
+      console.log('restarting with a buffer')
+      return {
+        carrier: { amount: 1, priority: 0 },
+        worker: { amount: 2, priority: 1 },
+      }
+    }
     // console.log('startingOut')
     return {
       harvester: { amount: 4, priority: 0 },
