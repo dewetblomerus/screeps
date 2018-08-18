@@ -23,15 +23,20 @@ const sourceStructures = creep =>
       structureUtils.isSourceStructure(structure),
   })
 
-const chooseSource = creep => {
-  // console.log(`allSourceStructures ${sourceStructures(creep)}`)
-  const newSource = creep.pos.findClosestByRange(sourceStructures(creep))
-  // console.log(`newSource: ${newSource}`)
+const anyStructures = creep =>
+  creep.room.find(FIND_STRUCTURES, {
+    filter: structure =>
+      sourceTypes.includes(structure.structureType) &&
+      containsMinEnergy(structure),
+  })
 
-  if (newSource) {
-    creep.memory.source = newSource.id
-  }
+const chooseSource = creep => {
+  const sourceStr = sourceStructures(creep)
+  const structures = sourceStr.length > 0 ? sourceStr : anyStructures(creep)
+  const newSource = creep.pos.findClosestByRange(structures)
   return newSource
 }
 
-module.exports = chooseSource
+const getSource = creep => chooseSource(creep)
+
+module.exports = getSource

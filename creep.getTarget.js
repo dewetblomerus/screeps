@@ -46,13 +46,12 @@ const chooseStructureType = creep => {
   return STRUCTURE_STORAGE
 }
 
-const structuresOfType = (creep, structureType) => {
+const structuresOfType = (creep, structureType) =>
   creep.room.find(FIND_STRUCTURES, {
     filter: structure =>
       structure.structureType === structureType &&
       structure.energy < structure.energyCapacity,
   })
-}
 
 const destinationContainers = room =>
   room.find(FIND_STRUCTURES, {
@@ -63,13 +62,11 @@ const destinationContainers = room =>
 
 const chooseTarget = creep => {
   const structureType = chooseStructureType(creep)
-  // console.log(`chosenStructureType: ${structureType}`)
   if (structureType === STRUCTURE_STORAGE) {
     return creep.room.storage
   }
 
   if (structureType === STRUCTURE_CONTAINER) {
-    // console.log('target is a container')
     return creep.pos.findClosestByRange(destinationContainers(creep.room))
   }
 
@@ -80,19 +77,13 @@ const chooseTarget = creep => {
 
 const getTarget = creep => {
   if (creep.memory.target) {
-    // console.log('it already has a target')
     // const target = Game.getObjectById(creep.memory.target)
     // console.log(`target: ${target}`)
   }
 
-  // if (structureFull(target)) {
-  // console.log('the target it already had is full')
   if (chooseTarget(creep)) {
-    // console.log('a new target was chosen')
     creep.memory.target = chooseTarget(creep).id
-    // console.log(Game.getObjectById(creep.memory.target))
   }
-  // }
 
   return Game.getObjectById(creep.memory.target)
 }
