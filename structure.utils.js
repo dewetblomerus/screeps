@@ -45,6 +45,14 @@ const structureUtils = {
     })
   },
 
+  storageLink(room) {
+    return room.find(FIND_MY_STRUCTURES, {
+      filter: structure =>
+        structure.structureType === STRUCTURE_LINK &&
+        structure.pos.inRangeTo(structure.room.storage, 2),
+    })[0]
+  },
+
   upgraderStructures(room, structureTypes = UPGRADER_STRUCTURE_TYPES) {
     return room.find(FIND_MY_STRUCTURES, {
       filter: structure =>
