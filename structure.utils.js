@@ -46,6 +46,9 @@ const structureUtils = {
   },
 
   storageLink(room) {
+    if (!room.storage) {
+      return null
+    }
     return room.find(FIND_MY_STRUCTURES, {
       filter: structure =>
         structure.structureType === STRUCTURE_LINK &&

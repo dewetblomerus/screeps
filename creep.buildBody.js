@@ -39,10 +39,31 @@ const bodyBudget = room => {
   return room.energyCapacityAvailable
 }
 
+const upgraderBudget = room => {
+  if (room.find(FIND_CONSTRUCTION_SITES).length > 0) {
+    return 200
+  }
+
+  if (room.storage) {
+    return room.storage.store[RESOURCE_ENERGY] - 5000
+  }
+
+  if (bodyBudget(room) > bodyBudgets.upgrader) {
+    return bodyBudgets.upgrader
+  }
+
+  return bodyBudget(room)
+}
+
 const realisticBudget = (room, role) => {
+  if (role === 'upgrader') {
+    return upgraderBudget(room)
+  }
+
   if (bodyBudget(room) > bodyBudgets[role]) {
     return bodyBudgets[role]
   }
+
   return bodyBudget(room)
 }
 
