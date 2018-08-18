@@ -46,7 +46,14 @@ const useContainers = () => {
   }
 }
 
-const useLinks = () => {
+const loaded = room => {
+  if (room.storage) {
+    return room.storage.store[RESOURCE_ENERGY] > 200000
+  }
+  return false
+}
+
+const useLinks = room => {
   // console.log('using containers')
   if (building()) {
     // console.log('building')
@@ -58,6 +65,14 @@ const useLinks = () => {
     }
   }
 
+  if (loaded(room)) {
+    return {
+      worker: { amount: 2, priority: 0 },
+      carrier: { amount: 1, priority: 1 },
+      upgrader: { amount: 2, priority: 2 },
+    }
+  }
+
   // console.log('returningDefault')
   return {
     worker: { amount: 2, priority: 0 },
@@ -66,7 +81,7 @@ const useLinks = () => {
   }
 }
 
-const targetState = () => {
+const targetState = room => {
   // console.log('inside targetState')
   if (startingOut(creepsInRoom())) {
     // console.log('startingOut')
@@ -81,9 +96,9 @@ const targetState = () => {
     return useContainers()
   }
 
-  if (linksAvailable()) {
+  if (linksAvailable(room)) {
     // console.log('containersAvailable')
-    return useLinks()
+    return useLinks(room)
   }
 
   if (building()) {

@@ -13,7 +13,7 @@ module.exports.loop = () => {
   const roomsArray = Object.values(Game.rooms)
   for (const room of roomsArray) {
     weighRoles(room)
-    spawnCreeps(targetState(), room)
+    spawnCreeps(targetState(room), room)
     towerManager.run(room)
     manageLinks(room)
   }

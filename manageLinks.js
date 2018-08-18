@@ -1,15 +1,18 @@
 const structureUtils = require('./structure.utils')
 
 const linkNeedingEnergy = room => {
-  if (room.storage) {
-    if (room.storage.store[RESOURCE_ENERGY] < 5000) {
-      return structureUtils.storageLink(room)
-    }
-  }
-
   const upgraderLink = structureUtils.upgraderStructures(room, [
     STRUCTURE_LINK,
   ])[0]
+
+  if (room.storage) {
+    if (
+      room.storage.store[RESOURCE_ENERGY] < 10000 ||
+      upgraderLink.energy > 700
+    ) {
+      return structureUtils.storageLink(room)
+    }
+  }
 
   if (upgraderLink.energy < upgraderLink.energyCapacity) {
     return upgraderLink
@@ -20,7 +23,12 @@ const linkNeedingEnergy = room => {
 
 const runSourceLink = link => {
   const result = link.transferEnergy(linkNeedingEnergy(link.room))
-  console.log(`result: ${result}`)
+  // console.log(`result: ${result}`)
+}
+
+const runStorageLink = link => {
+  const result = link.transferEnergy(linkNeedingEnergy(link.room))
+  // console.log(`result: ${result}`)
 }
 
 const manageLinks = room => {
@@ -36,6 +44,10 @@ const manageLinks = room => {
 
   for (const link of sourceLinks) {
     runSourceLink(link, storageLink, upgraderLink)
+  }
+
+  if (storageLink) {
+    runStorageLink(storageLink)
   }
 }
 
