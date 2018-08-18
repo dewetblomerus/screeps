@@ -28,12 +28,9 @@ const targetsNeedingEnergy = creep =>
 
 const chooseStructureType = creep => {
   const structures = targetsNeedingEnergy(creep)
-  console.log(`needsEnergy: ${structures}`)
   const structureTypesNeedingEnergy = structures.map(
     structure => structure.structureType
   )
-  console.log(`types: ${structureTypesNeedingEnergy}`)
-  console.log(structureTypesNeedingEnergy)
   if (structureTypesNeedingEnergy.length > 0) {
     // console.log('there are targets');
     const structureType = structureTypesNeedingEnergy.reduce(
@@ -41,7 +38,6 @@ const chooseStructureType = creep => {
         targetPriorities[a].priority < targetPriorities[b].priority ? a : b
     )
 
-    console.log(`prioritized structureType: ${structureType}`)
     return structureType
   }
   return STRUCTURE_STORAGE
