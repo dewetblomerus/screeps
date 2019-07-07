@@ -1,4 +1,4 @@
-const getSource = require('./creep.getSource')
+const getSource = require('./creep.getSupply')
 const getTarget = require('./creep.getTarget')
 
 const deposit = creep => {
