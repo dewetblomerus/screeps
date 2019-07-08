@@ -44,6 +44,14 @@ const upgraderBudget = room => {
     return 200
   }
 
+  if (room.storage) {
+    const healthyBudget = room.storage.store[RESOURCE_ENERGY] - 5000
+    if (healthyBudget > room.energyCapacityAvailable) {
+      return room.energyCapacityAvailable
+    }
+    return healthyBudget
+  }
+
   if (bodyBudget(room) > bodyBudgets.upgrader) {
     return bodyBudgets.upgrader
   }
