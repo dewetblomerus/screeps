@@ -3,9 +3,9 @@ const structureUtils = require('./structure.utils')
 const minEnergyToMove = 300
 
 const storeTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE]
-const sourceTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK]
+const supplyTypes = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, STRUCTURE_LINK]
 
-const sourceStructurePriorities = [
+const supplyStructurePriorities = [
   ['container', 10],
   ['link', 10],
   ['storage', 10],
@@ -51,15 +51,15 @@ const containsMinEnergy = structure =>
   containsEnergy(structure) > minEnergyToMove
 
 const adjustedPriorities = creep => {
-  return sourceStructurePriorities.map(([structureType, priority]) => [
+  return supplyStructurePriorities.map(([structureType, priority]) => [
     structureType,
     adjustPriority(structureType, priority, creep.room),
   ])
 }
 
-const sourceStructures = creep => {
+const supplyStructures = creep => {
   if (structureUtils.storageLink(creep.room)) {
-    // console.log('there is a source link')
+    // console.log('there is a supply link')
     if (structureUtils.storageLink(creep.room).energy > minEnergyToMove) {
       // console.log('it has enough')
       return structureUtils.storageLink(creep.room)
@@ -68,7 +68,7 @@ const sourceStructures = creep => {
 
   return creep.room.find(FIND_STRUCTURES, {
     filter: structure =>
-      sourceTypes.includes(structure.structureType) &&
+      supplyTypes.includes(structure.structureType) &&
       containsMinEnergy(structure) &&
       structureUtils.isSourceStructure(structure),
   })
@@ -77,7 +77,7 @@ const sourceStructures = creep => {
 const anyStructures = creep =>
   creep.room.find(FIND_STRUCTURES, {
     filter: structure =>
-      sourceTypes.includes(structure.structureType) &&
+      supplyTypes.includes(structure.structureType) &&
       containsMinEnergy(structure),
   })
 
@@ -92,8 +92,8 @@ const chooseStructureType = creep => {
   )
 
   if (relevantPriorities.length > 0) {
-    const structureType = relevantPriorities.reduce(
-      (a, b) => (a[1] > b[1] ? a : b)
+    const structureType = relevantPriorities.reduce((a, b) =>
+      a[1] > b[1] ? a : b
     )[0]
 
     return structureType
@@ -101,7 +101,7 @@ const chooseStructureType = creep => {
   return STRUCTURE_STORAGE
 }
 
-const chooseSource = creep => {
+const chooseSupply = creep => {
   const structureType = chooseStructureType(creep)
   if (structureType === STRUCTURE_STORAGE) {
     return creep.room.storage
@@ -118,6 +118,6 @@ const chooseSource = creep => {
   }
 }
 
-const getSource = creep => chooseSource(creep)
+const getSupply = creep => chooseSupply(creep)
 
-module.exports = getSource
+module.exports = getSupply

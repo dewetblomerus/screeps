@@ -1,4 +1,4 @@
-const getSource = require('./creep.getSupply')
+const getSupply = require('./creep.getSupply')
 const getTarget = require('./creep.getTarget')
 
 const deposit = creep => {
@@ -33,7 +33,7 @@ const roleCarrier = {
     if (creep.memory.depositing) {
       deposit(creep)
     } else {
-      const source = getSource(creep)
+      const source = getSupply(creep)
       if (creep.withdraw(source, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
         creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
       }
