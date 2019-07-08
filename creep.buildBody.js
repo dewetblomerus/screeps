@@ -45,10 +45,15 @@ const upgraderBudget = room => {
   }
 
   if (room.storage) {
-    const healthyBudget = room.storage.store[RESOURCE_ENERGY] - 5000
+    const healthyBudget = room.storage.store[RESOURCE_ENERGY] - 10000
     if (healthyBudget > room.energyCapacityAvailable) {
       return room.energyCapacityAvailable
     }
+
+    if (healthyBudget < 200) {
+      return 200
+    }
+
     return healthyBudget
   }
 
