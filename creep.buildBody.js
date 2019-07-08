@@ -44,10 +44,6 @@ const upgraderBudget = room => {
     return 200
   }
 
-  if (room.storage) {
-    return room.storage.store[RESOURCE_ENERGY] - 5000
-  }
-
   if (bodyBudget(room) > bodyBudgets.upgrader) {
     return bodyBudgets.upgrader
   }
@@ -88,8 +84,8 @@ const nextBodyPart = ({ body, role }) => {
 
   // console.log(`currentPriorities: ${currentPriorities}`)
 
-  const maxPriority = currentPriorities.reduce(
-    (max, priority) => (priority[1] > max[1] ? priority : max)
+  const maxPriority = currentPriorities.reduce((max, priority) =>
+    priority[1] > max[1] ? priority : max
   )[0]
 
   return maxPriority
