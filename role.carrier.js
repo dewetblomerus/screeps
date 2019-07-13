@@ -2,9 +2,7 @@ const getSupply = require('./creep.getSupply')
 const getTarget = require('./creep.getTarget')
 
 const deposit = creep => {
-  // console.log('carrier inside deposit')
   const target = getTarget(creep)
-  // console.log(`carrier target: ${target}`)
   if (target) {
     if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
       creep.moveTo(target, {
@@ -29,13 +27,12 @@ const roleCarrier = {
       creep.memory.target = getTarget(creep)
       creep.say('deposit')
     }
-
     if (creep.memory.depositing) {
       deposit(creep)
     } else {
-      const source = getSupply(creep)
-      if (creep.withdraw(source, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
+      const supply = getSupply(creep)
+      if (creep.withdraw(supply, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(supply, { visualizePathStyle: { stroke: '#ffaa00' } })
       }
     }
   },

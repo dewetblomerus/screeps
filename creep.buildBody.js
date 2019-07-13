@@ -13,6 +13,7 @@ const bodyBudgets = {
   harvester: 1000,
   upgrader: 1000,
   builder: 1000,
+  remoteMiner: 400,
 }
 
 const countCreepsInRoom = () => {

@@ -83,6 +83,7 @@ const anyStructures = creep =>
 
 const chooseStructureType = creep => {
   const structures = anyStructures(creep)
+
   const structureTypesWithEnergy = structures.map(
     structure => structure.structureType
   )
@@ -90,7 +91,6 @@ const chooseStructureType = creep => {
   const relevantPriorities = adjustedPriorities(creep).filter(
     ([structureType]) => structureTypesWithEnergy.includes(structureType)
   )
-
   if (relevantPriorities.length > 0) {
     const structureType = relevantPriorities.reduce((a, b) =>
       a[1] > b[1] ? a : b
