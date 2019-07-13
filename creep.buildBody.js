@@ -4,6 +4,7 @@ const bodyPriorities = {
   harvester: [[WORK, 1], [CARRY, 1], [MOVE, 1]],
   upgrader: [[WORK, 3], [CARRY, 1], [MOVE, 1]],
   builder: [[WORK, 2], [CARRY, 1], [MOVE, 1]],
+  remoteMiner: [[WORK, 1], [CARRY, 1], [MOVE, 1]],
 }
 
 const bodyBudgets = {

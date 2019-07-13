@@ -15,10 +15,11 @@ const statusUpdate = (targetState, room) => {
   }
 
   const populationUpdate = `Population:${Object.keys(targetState).map(role => {
+    // console.log(role)
     if (countCreeps(role) > 0) {
       return ` ${role}: ${countCreeps(role)}/${targetState[role].amount}`
     }
-    return 0
+    return `${role}: 0`
   })}`
 
   const energyUpdate = `Energy: ${room.energyAvailable}/${
