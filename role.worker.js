@@ -31,20 +31,18 @@ const chooseTarget = creep =>
     filter: structure => targetTypes.includes(structure.structureType),
   })
 
-const roleWorker = {
-  run(creep) {
-    if (creep.carry.energy === creep.carryCapacity) {
-      creep.say('🔄 drop')
-      for (const resourceType in creep.carry) {
-        creep.drop(resourceType)
-      }
-    } else {
-      const source = chooseSource(creep)
-      if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
-      }
+const roleWorker = creep => {
+  if (creep.carry.energy === creep.carryCapacity) {
+    creep.say('🔄 drop')
+    for (const resourceType in creep.carry) {
+      creep.drop(resourceType)
     }
-  },
+  } else {
+    const source = chooseSource(creep)
+    if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+      creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
+    }
+  }
 }
 
 module.exports = roleWorker

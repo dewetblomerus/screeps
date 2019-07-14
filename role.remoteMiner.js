@@ -37,50 +37,45 @@ const chooseTarget = creep => {
   return sortedTargetsRange[0]
 }
 
-const roleRemoteMiner = {
-  run(creep) {
-    if (!creep.memory.sourceId) {
-      console.log('there is no sourceId in the memory')
+const roleRemoteMiner = creep => {
+  if (!creep.memory.sourceId) {
+    console.log('there is no sourceId in the memory')
+    const flag = chooseFlag()
+    creep.moveTo(flag.pos)
+    if (creep.room === flag.room) {
+      creep.memory.sourceId = flag.pos.findClosestByRange(FIND_SOURCES).id
+    }
+  }
+
+  if (creep.memory.depositing && creep.carry.energy === 0) {
+    creep.memory.depositing = false
+    creep.say('🔄 harvest')
+  }
+  if (!creep.memory.depositing && creep.carry.energy === creep.carryCapacity) {
+    creep.memory.depositing = true
+    creep.say('deposit')
+  }
+
+  if (creep.memory.depositing) {
+    // console.log(`${creep.name} finding structures`)
+    const target = chooseTarget(creep)
+    if (target) {
+      if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        // console.log(`moving to target: ${target}`);
+        creep.moveTo(target, {
+          visualizePathStyle: { stroke: '#ffffff' },
+        })
+      }
+    }
+  } else {
+    const source = Game.getObjectById(creep.memory.sourceId)
+    if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+      creep.moveTo(source.pos, { visualizePathStyle: { stroke: '#ffaa00' } })
+    } else {
       const flag = chooseFlag()
       creep.moveTo(flag.pos)
-      if (creep.room === flag.room) {
-        creep.memory.sourceId = flag.pos.findClosestByRange(FIND_SOURCES).id
-      }
     }
-
-    if (creep.memory.depositing && creep.carry.energy === 0) {
-      creep.memory.depositing = false
-      creep.say('🔄 harvest')
-    }
-    if (
-      !creep.memory.depositing &&
-      creep.carry.energy === creep.carryCapacity
-    ) {
-      creep.memory.depositing = true
-      creep.say('deposit')
-    }
-
-    if (creep.memory.depositing) {
-      // console.log(`${creep.name} finding structures`)
-      const target = chooseTarget(creep)
-      if (target) {
-        if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-          // console.log(`moving to target: ${target}`);
-          creep.moveTo(target, {
-            visualizePathStyle: { stroke: '#ffffff' },
-          })
-        }
-      }
-    } else {
-      const source = Game.getObjectById(creep.memory.sourceId)
-      if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-        creep.moveTo(source.pos, { visualizePathStyle: { stroke: '#ffaa00' } })
-      } else {
-        const flag = chooseFlag()
-        creep.moveTo(flag.pos)
-      }
-    }
-  },
+  }
 }
 
 module.exports = roleRemoteMiner

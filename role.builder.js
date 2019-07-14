@@ -35,64 +35,61 @@ const chooseSite = creep => {
   return findConstruction(creep)
 }
 
-const roleBuilder = {
-  /** @param {Creep} creep * */
-  run(creep) {
-    if (doneBuilding(creep)) {
-      creep.memory.building = false
-      console.log('builder doneBuilding')
-      creep.say('🔄 harvest')
-    }
+const roleBuilder = creep => {
+  if (doneBuilding(creep)) {
+    creep.memory.building = false
+    console.log('builder doneBuilding')
+    creep.say('🔄 harvest')
+  }
 
-    if (doneHarvesting(creep)) {
-      creep.memory.building = true
-      creep.memory.target = findConstruction.id
-      setTargetId(creep)
-      console.log('builder doneHarvesting')
-      creep.say('🚧 build')
-    }
+  if (doneHarvesting(creep)) {
+    creep.memory.building = true
+    creep.memory.target = findConstruction.id
+    setTargetId(creep)
+    console.log('builder doneHarvesting')
+    creep.say('🚧 build')
+  }
 
-    if (creep.memory.building) {
-      // console.log(`${target.progress}/${target.progressTotal}`);
-      const targets = creep.room.find(FIND_CONSTRUCTION_SITES)
-      const target = chooseSite(creep)
-      // console.log(`in progress: ${target}`);
-      // console.log(`builder target: ${creep.memory.target}`);
-      if (targets.length) {
-        if (creep.build(target) === ERR_NOT_IN_RANGE) {
-          // target building code
-          creep.moveTo(target, {
-            // maxRooms: 1,
-            visualizePathStyle: { stroke: '#ffffff' },
-          })
-          // normal code
-          // creep.moveTo(targets[0], {
-          //   visualizePathStyle: { stroke: '#ffffff' }
-          // });
-        }
+  if (creep.memory.building) {
+    // console.log(`${target.progress}/${target.progressTotal}`);
+    const targets = creep.room.find(FIND_CONSTRUCTION_SITES)
+    const target = chooseSite(creep)
+    // console.log(`in progress: ${target}`);
+    // console.log(`builder target: ${creep.memory.target}`);
+    if (targets.length) {
+      if (creep.build(target) === ERR_NOT_IN_RANGE) {
+        // target building code
+        creep.moveTo(target, {
+          // maxRooms: 1,
+          visualizePathStyle: { stroke: '#ffffff' },
+        })
+        // normal code
+        // creep.moveTo(targets[0], {
+        //   visualizePathStyle: { stroke: '#ffffff' }
+        // });
+      }
+    }
+  } else {
+    const sourceBuilding = chooseSourceBuilding(creep)
+    // if (creep.room.storage) {
+    if (sourceBuilding) {
+      // const source = getSource(creep)
+      // console.log(source);
+      if (
+        creep.withdraw(sourceBuilding, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE
+      ) {
+        // console.log('not in range');
+        creep.moveTo(sourceBuilding, {
+          visualizePathStyle: { stroke: '#ffaa00' },
+        })
       }
     } else {
-      const sourceBuilding = chooseSourceBuilding(creep)
-      // if (creep.room.storage) {
-      if (sourceBuilding) {
-        // const source = getSource(creep)
-        // console.log(source);
-        if (
-          creep.withdraw(sourceBuilding, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE
-        ) {
-          // console.log('not in range');
-          creep.moveTo(sourceBuilding, {
-            visualizePathStyle: { stroke: '#ffaa00' },
-          })
-        }
-      } else {
-        const source = chooseSource(creep)
-        if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-          creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
-        }
+      const source = chooseSource(creep)
+      if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })
       }
     }
-  },
+  }
 }
 
 module.exports = roleBuilder

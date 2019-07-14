@@ -12,22 +12,22 @@ const manageCreeps = () => {
     setHome(creep)
 
     if (creep.memory.role === 'harvester') {
-      roleHarvester.run(creep)
+      roleHarvester(creep)
     }
     if (creep.memory.role === 'upgrader') {
-      roleUpgrader.run(creep)
+      roleUpgrader(creep)
     }
     if (creep.memory.role === 'builder') {
-      roleBuilder.run(creep)
+      roleBuilder(creep)
     }
     if (creep.memory.role === 'worker') {
-      roleWorker.run(creep)
+      roleWorker(creep)
     }
     if (creep.memory.role === 'carrier') {
       roleCarrier(creep)
     }
     if (creep.memory.role === 'remoteMiner') {
-      roleRemoteMiner.run(creep)
+      roleRemoteMiner(creep)
     }
   }
 }

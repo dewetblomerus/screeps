@@ -23,7 +23,6 @@ const notEnoughStorage = room => room.storage.store[RESOURCE_ENERGY] < 20000
 const adjustPriority = (structureType, priority, room) => {
   if (structureType === 'storage') {
     if (notEnoughStorage(room)) {
-      console.log('notEnoughStorage')
       return 4
     }
   }
