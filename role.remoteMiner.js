@@ -66,7 +66,6 @@ const roleRemoteMiner = {
       // console.log(`${creep.name} finding structures`)
       const target = chooseTarget(creep)
       if (target) {
-        console.log('there is a target')
         if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
           // console.log(`moving to target: ${target}`);
           creep.moveTo(target, {

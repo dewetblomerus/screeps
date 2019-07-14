@@ -30,29 +30,27 @@ const adjustPriority = (structureType, priority, room) => {
   return priority
 }
 
-const adjustedPriorities = creep => {
+const adjustedPriorities = room => {
   return targetPriorities.map(([structureType, priority]) => [
     structureType,
-    adjustPriority(structureType, priority, creep.room),
+    adjustPriority(structureType, priority, room),
   ])
 }
 
-const targetsNeedingEnergy = creep => {
-  homeRoom = Game.rooms[creep.memory.homeRoom]
-  return homeRoom.find(FIND_STRUCTURES, {
+const targetsNeedingEnergy = room =>
+  room.find(FIND_STRUCTURES, {
     filter: structure =>
       targetTypes.includes(structure.structureType) &&
       !structureUtils.full(structure),
   })
-}
 
-const chooseStructureType = creep => {
-  const structures = targetsNeedingEnergy(creep)
+const chooseStructureType = room => {
+  const structures = targetsNeedingEnergy(room)
   const structureTypesNeedingEnergy = structures.map(
     structure => structure.structureType
   )
 
-  const relevantPriorities = adjustedPriorities(creep).filter(
+  const relevantPriorities = adjustedPriorities(room).filter(
     ([structureType]) => structureTypesNeedingEnergy.includes(structureType)
   )
 
@@ -66,8 +64,8 @@ const chooseStructureType = creep => {
   return STRUCTURE_STORAGE
 }
 
-const structuresOfType = (creep, structureType) =>
-  creep.room.find(FIND_STRUCTURES, {
+const structuresOfType = (room, structureType) =>
+  room.find(FIND_STRUCTURES, {
     filter: structure =>
       structure.structureType === structureType &&
       structure.energy < structure.energyCapacity,
@@ -80,17 +78,17 @@ const destinationContainers = room =>
       s.pos.findInRange(FIND_SOURCES, 2).length === 0,
   })
 
-const chooseTarget = creep => {
-  const structureType = chooseStructureType(creep)
+const chooseTarget = (creep, room) => {
+  const structureType = chooseStructureType(room)
   if (structureType === STRUCTURE_STORAGE) {
-    return creep.room.storage
+    return room.storage
   }
 
   if (structureType === STRUCTURE_CONTAINER) {
-    return creep.pos.findClosestByRange(destinationContainers(creep.room))
+    return creep.pos.findClosestByRange(destinationContainers(room))
   }
 
-  const potentialTargets = structuresOfType(creep, structureType)
+  const potentialTargets = structuresOfType(room, structureType)
   const newTarget = creep.pos.findClosestByRange(potentialTargets)
   return newTarget
 }
@@ -101,8 +99,10 @@ const getTarget = creep => {
     // console.log(`target: ${target}`)
   }
 
-  if (chooseTarget(creep)) {
-    creep.memory.target = chooseTarget(creep).id
+  homeRoom = Game.rooms[creep.memory.homeRoom]
+  chosenTarget = chooseTarget(creep, homeRoom)
+  if (chosenTarget) {
+    creep.memory.target = chosenTarget.id
   }
 
   return Game.getObjectById(creep.memory.target)
