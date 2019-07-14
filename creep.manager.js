@@ -4,6 +4,7 @@ const roleBuilder = require('./role.builder')
 const roleWorker = require('./role.worker')
 const roleCarrier = require('./role.carrier')
 const roleRemoteMiner = require('./role.remoteMiner')
+const roleRemoteCarrier = require('./role.remoteCarrier')
 const setHome = require('./creep.setHome')
 
 const manageCreeps = () => {
@@ -28,6 +29,9 @@ const manageCreeps = () => {
     }
     if (creep.memory.role === 'remoteMiner') {
       roleRemoteMiner(creep)
+    }
+    if (creep.memory.role === 'remoteCarrier') {
+      roleRemoteCarrier(creep)
     }
   }
 }

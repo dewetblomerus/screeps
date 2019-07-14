@@ -92,6 +92,7 @@ const useLinks = room => {
     carrier: { amount: 1, priority: 1 },
     upgrader: { amount: 1, priority: 2 },
     remoteMiner: { amount: remoteMiners(), priority: 3 },
+    remoteCarrier: { amount: 1, priority: 3 },
   }
 }
 

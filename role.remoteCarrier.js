@@ -12,27 +12,7 @@ const deposit = creep => {
   }
 }
 
-const collect = creep => {
-  const dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES)
-  if (dropped) {
-    if (dropped.amount > 300) {
-      // console.log('there is more than 300')
-      if (dropped) {
-        if (creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
-          creep.moveTo(dropped)
-        }
-        return
-      }
-    }
-  }
-
-  const supply = getSupply(creep)
-  if (creep.withdraw(supply, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-    creep.moveTo(supply, { visualizePathStyle: { stroke: '#ffaa00' } })
-  }
-}
-
-const roleCarrier = creep => {
+const roleRemoteCarrier = creep => {
   if (creep.memory.depositing && creep.carry.energy === 0) {
     creep.memory.depositing = false
     creep.say('🔄 collect')
@@ -47,8 +27,24 @@ const roleCarrier = creep => {
   if (creep.memory.depositing) {
     deposit(creep)
   } else {
-    collect(creep)
+    const dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES)
+    if (dropped) {
+      if (dropped.amount > 300) {
+        // console.log('there is more than 300')
+        if (dropped) {
+          if (creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
+            creep.moveTo(dropped)
+          }
+          return
+        }
+      }
+    }
+
+    const supply = getSupply(creep)
+    if (creep.withdraw(supply, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+      creep.moveTo(supply, { visualizePathStyle: { stroke: '#ffaa00' } })
+    }
   }
 }
 
-module.exports = roleCarrier
+module.exports = roleRemoteCarrier

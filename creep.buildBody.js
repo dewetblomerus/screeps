@@ -5,6 +5,7 @@ const bodyPriorities = {
   upgrader: [[WORK, 3], [CARRY, 1], [MOVE, 1]],
   builder: [[WORK, 2], [CARRY, 1], [MOVE, 1]],
   remoteMiner: [[WORK, 1], [CARRY, 1], [MOVE, 1]],
+  remoteCarrier: [[CARRY, 1], [MOVE, 1]],
 }
 
 const bodyBudgets = {
@@ -13,7 +14,8 @@ const bodyBudgets = {
   harvester: 1000,
   upgrader: 1000,
   builder: 1000,
-  remoteMiner: 400,
+  remoteMiner: 200,
+  remoteCarrier: 100,
 }
 
 const countCreepsInRoom = () => {
