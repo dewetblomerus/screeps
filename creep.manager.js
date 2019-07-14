@@ -3,6 +3,7 @@ const roleUpgrader = require('./role.upgrader')
 const roleBuilder = require('./role.builder')
 const roleWorker = require('./role.worker')
 const roleCarrier = require('./role.carrier')
+const roleRemoteMiner = require('./role.remoteMiner')
 
 const manageCreeps = () => {
   const creepsArray = Object.values(Game.creeps)
@@ -21,6 +22,9 @@ const manageCreeps = () => {
     }
     if (creep.memory.role === 'carrier') {
       roleCarrier.run(creep)
+    }
+    if (creep.memory.role === 'remoteMiner') {
+      roleRemoteMiner.run(creep)
     }
   }
 }
