@@ -1,35 +1,25 @@
-const targetTypes = [STRUCTURE_CONTAINER, STRUCTURE_LINK]
-// const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER];
-
 const chooseSource = creep => {
   const sourceFromMemory = Game.getObjectById(creep.memory.targetSource)
-  // console.log(sourceFromMemory);
   if (creep.memory.targetSource) {
-    // console.log(`source from memory: ${sourceFromMemory}`);
     return sourceFromMemory
   }
 
+  console.log('The worker has no source in memory')
+
   const sources = creep.room.find(FIND_SOURCES)
-  const targetedSources = Object.keys(Game.creeps).map(creepName =>
-    Game.getObjectById(Game.creeps[creepName].memory.targetSource)
-  )
-  // console.log(`targetedSources: ${targetedSources}`);
+  const targetedSources = Object.keys(Game.creeps)
+    .map(creepName =>
+      Game.getObjectById(Game.creeps[creepName].memory.targetSource)
+    )
+    .filter(source => source !== null)
+
   const untargetedSources = sources.filter(
     source => !targetedSources.includes(source)
   )
-  // console.log(`untargeted: ${untargetedSources}`);
+  console.log(`untargeted: ${untargetedSources}`)
+  creep.memory.targetSource = untargetedSources[0].id
   return untargetedSources[0]
 }
-
-const setSource = creep => {
-  const targetSource = chooseSource(creep).id
-  creep.memory.targetSource = targetSource
-}
-
-const chooseTarget = creep =>
-  creep.pos.findClosestByRange(FIND_STRUCTURES, {
-    filter: structure => targetTypes.includes(structure.structureType),
-  })
 
 const roleWorker = creep => {
   if (creep.carry.energy === creep.carryCapacity) {
