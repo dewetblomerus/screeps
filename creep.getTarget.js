@@ -18,11 +18,12 @@ const targetTypes = [
   STRUCTURE_LINK,
 ]
 
-const notEnoughStorage = room => room.storage.store[RESOURCE_ENERGY] < 50000
+const notEnoughStorage = room => room.storage.store[RESOURCE_ENERGY] < 20000
 
 const adjustPriority = (structureType, priority, room) => {
   if (structureType === 'storage') {
     if (notEnoughStorage(room)) {
+      console.log('notEnoughStorage')
       return 4
     }
   }

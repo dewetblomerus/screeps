@@ -33,33 +33,10 @@ const chooseTarget = creep =>
 
 const roleWorker = {
   run(creep) {
-    if (creep.memory.depositing && creep.carry.energy === 0) {
-      // console.log(`Worker Start Harvesting`);
-      creep.memory.depositing = false
-      setSource(creep)
-      creep.say('🔄 harvest')
-    }
-    if (
-      !creep.memory.depositing &&
-      creep.carry.energy === creep.carryCapacity
-    ) {
-      // console.log(`Worker Start Depositing`);
-      creep.memory.depositing = true
-      creep.say('🔋 deposit')
-    }
-
-    if (creep.memory.depositing) {
-      // console.log(`${creep.name} finding structures`)
-      const target = chooseTarget(creep)
-      if (target) {
-        // console.log('there is a target');
-        if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-          // console.log(`Worker out of range: ${target}`)
-          creep.moveTo(target, {
-            visualizePathStyle: { stroke: '#ffffff' },
-          })
-          // console.log(result)
-        }
+    if (creep.carry.energy === creep.carryCapacity) {
+      creep.say('🔄 drop')
+      for (const resourceType in creep.carry) {
+        creep.drop(resourceType)
       }
     } else {
       const source = chooseSource(creep)

@@ -23,12 +23,23 @@ const roleCarrier = creep => {
     creep.memory.target = getTarget(creep)
     creep.say('deposit')
   }
+
   if (creep.memory.depositing) {
     deposit(creep)
   } else {
-    const supply = getSupply(creep)
-    if (creep.withdraw(supply, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-      creep.moveTo(supply, { visualizePathStyle: { stroke: '#ffaa00' } })
+    const dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES)
+    if (dropped.amount > 300) {
+      // console.log('there is more than 300')
+      if (dropped) {
+        if (creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
+          creep.moveTo(dropped)
+        }
+      }
+    } else {
+      const supply = getSupply(creep)
+      if (creep.withdraw(supply, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+        creep.moveTo(supply, { visualizePathStyle: { stroke: '#ffaa00' } })
+      }
     }
   }
 }
