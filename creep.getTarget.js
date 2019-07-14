@@ -37,12 +37,14 @@ const adjustedPriorities = creep => {
   ])
 }
 
-const targetsNeedingEnergy = creep =>
-  creep.room.find(FIND_STRUCTURES, {
+const targetsNeedingEnergy = creep => {
+  homeRoom = Game.rooms[creep.memory.homeRoom]
+  return homeRoom.find(FIND_STRUCTURES, {
     filter: structure =>
       targetTypes.includes(structure.structureType) &&
       !structureUtils.full(structure),
   })
+}
 
 const chooseStructureType = creep => {
   const structures = targetsNeedingEnergy(creep)
@@ -55,8 +57,8 @@ const chooseStructureType = creep => {
   )
 
   if (relevantPriorities.length > 0) {
-    const structureType = relevantPriorities.reduce(
-      (a, b) => (a[1] > b[1] ? a : b)
+    const structureType = relevantPriorities.reduce((a, b) =>
+      a[1] > b[1] ? a : b
     )[0]
 
     return structureType
