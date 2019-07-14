@@ -24,7 +24,7 @@ const manageCreeps = () => {
       roleWorker.run(creep)
     }
     if (creep.memory.role === 'carrier') {
-      roleCarrier.run(creep)
+      roleCarrier(creep)
     }
     if (creep.memory.role === 'remoteMiner') {
       roleRemoteMiner.run(creep)

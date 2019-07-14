@@ -49,7 +49,6 @@ const roleRemoteMiner = {
     }
 
     if (creep.memory.depositing && creep.carry.energy === 0) {
-      console.log(`Stop Depositing`)
       creep.memory.depositing = false
       creep.say('🔄 harvest')
     }
@@ -57,7 +56,6 @@ const roleRemoteMiner = {
       !creep.memory.depositing &&
       creep.carry.energy === creep.carryCapacity
     ) {
-      console.log(`Start Depositing`)
       creep.memory.depositing = true
       creep.say('deposit')
     }
@@ -74,13 +72,8 @@ const roleRemoteMiner = {
         }
       }
     } else {
-      // console.log(Game.rooms)
       const source = Game.getObjectById(creep.memory.sourceId)
-      console.log(creep.memory.sourceId)
-      // console.log(source)
-      console.log(creep.harvest(source))
       if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-        console.log('moving to source')
         creep.moveTo(source.pos, { visualizePathStyle: { stroke: '#ffaa00' } })
       } else {
         const flag = chooseFlag()
