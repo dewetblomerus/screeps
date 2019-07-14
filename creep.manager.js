@@ -4,10 +4,13 @@ const roleBuilder = require('./role.builder')
 const roleWorker = require('./role.worker')
 const roleCarrier = require('./role.carrier')
 const roleRemoteMiner = require('./role.remoteMiner')
+const setHome = require('./creep.setHome')
 
 const manageCreeps = () => {
   const creepsArray = Object.values(Game.creeps)
   for (const creep of creepsArray) {
+    setHome(creep)
+
     if (creep.memory.role === 'harvester') {
       roleHarvester.run(creep)
     }

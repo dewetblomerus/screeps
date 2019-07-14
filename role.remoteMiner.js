@@ -48,11 +48,6 @@ const roleRemoteMiner = {
       }
     }
 
-    if (!creep.memory.homeRoom) {
-      console.log('there is no homeRoom in the memory')
-      creep.memory.homeRoom = creep.room.name
-    }
-
     if (creep.memory.depositing && creep.carry.energy === 0) {
       console.log(`Stop Depositing`)
       creep.memory.depositing = false
