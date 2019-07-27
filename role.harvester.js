@@ -1,3 +1,5 @@
+const pickup = require('./creep.pickup')
+
 const sourceIndex = 1
 const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER]
 
@@ -56,6 +58,7 @@ const roleHarvester = creep => {
       }
     }
   } else {
+    pickup(creep)
     const source = chooseSource(creep)
     if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
       creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } })

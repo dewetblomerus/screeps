@@ -3,7 +3,7 @@ const creepsInRoom = () => {
   return allCreepsCount
 }
 
-const startingOut = creepsCount => creepsCount < 3
+const startingOut = creepsCount => creepsCount < 1
 
 const building = () => {
   const constructionSites = Game.spawns.Spawn1.room.find(
@@ -105,14 +105,13 @@ const targetState = room => {
         console.log('restarting with a buffer')
       }
       return {
+        worker: { amount: 2, priority: 0 },
         carrier: { amount: 1, priority: 0 },
-        worker: { amount: 2, priority: 1 },
       }
     }
     // console.log('startingOut')
     return {
-      harvester: { amount: 4, priority: 0 },
-      upgrader: { amount: 1, priority: 1 },
+      harvester: { amount: 1, priority: 0 },
     }
   }
 
@@ -129,15 +128,17 @@ const targetState = room => {
   if (building()) {
     // console.log('building')
     return {
-      harvester: { amount: 2, priority: 0 },
-      upgrader: { amount: 1, priority: 1 },
+      worker: { amount: 1, priority: 0 },
+      carrier: { amount: 1, priority: 0 },
+      upgrader: { amount: 1, priority: 2 },
       builder: { amount: 2, priority: 3 },
     }
   }
 
   return {
-    harvester: { amount: 4, priority: 0 },
-    upgrader: { amount: 1, priority: 1 },
+    worker: { amount: 2, priority: 0 },
+    carrier: { amount: 1, priority: 0 },
+    upgrader: { amount: 3, priority: 2 },
   }
 }
 

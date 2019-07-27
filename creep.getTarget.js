@@ -18,11 +18,15 @@ const targetTypes = [
   STRUCTURE_LINK,
 ]
 
-const notEnoughStorage = room => room.storage.store[RESOURCE_ENERGY] < 20000
+const enoughStorage = room => {
+  if (room.storage) {
+    return room.storage.store[RESOURCE_ENERGY] > 20000
+  }
+}
 
 const adjustPriority = (structureType, priority, room) => {
   if (structureType === 'storage') {
-    if (notEnoughStorage(room)) {
+    if (!enoughStorage(room)) {
       return 4
     }
   }
@@ -53,7 +57,6 @@ const chooseStructureType = room => {
   const relevantPriorities = adjustedPriorities(room).filter(
     ([structureType]) => structureTypesNeedingEnergy.includes(structureType)
   )
-
   if (relevantPriorities.length > 0) {
     const structureType = relevantPriorities.reduce((a, b) =>
       a[1] > b[1] ? a : b
@@ -61,7 +64,14 @@ const chooseStructureType = room => {
 
     return structureType
   }
-  return STRUCTURE_STORAGE
+
+  if (room.storage) {
+    // console.log('returning Storage')
+    return STRUCTURE_STORAGE
+  }
+
+  // console.log('returning Spawn')
+  return STRUCTURE_SPAWN
 }
 
 const structuresOfType = (room, structureType) =>
@@ -94,6 +104,7 @@ const chooseTarget = (creep, room) => {
 }
 
 const getTarget = creep => {
+  // console.log('getTarget')
   if (creep.memory.target) {
     // const target = Game.getObjectById(creep.memory.target)
     // console.log(`target: ${target}`)
