@@ -28,13 +28,16 @@ const prioritizeUpgrading = room => {
 
 const adjustPriority = (structureType, priority, room) => {
   if (structureType === 'storage') {
-    if (notEnoughStorage(room)) {
-      return priority - 1
-    }
+    if (room.storage) {
+      if (notEnoughStorage(room)) {
+        return priority - 1
+      }
 
-    if (prioritizeUpgrading(room)) {
-      return priority + 1
+      if (prioritizeUpgrading(room)) {
+        return priority + 1
+      }
     }
+    return priority
   }
 
   return priority
