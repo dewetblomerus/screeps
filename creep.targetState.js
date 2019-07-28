@@ -135,9 +135,10 @@ const targetState = room => {
     }
   }
 
+  // console.log('default target state')
   return {
     worker: { amount: 2, priority: 0 },
-    carrier: { amount: 1, priority: 0 },
+    carrier: { amount: 1, priority: 1 },
     upgrader: { amount: 3, priority: 2 },
   }
 }
