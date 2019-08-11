@@ -1,4 +1,4 @@
-const structureUtils = require('./structure.utils')
+import structureUtils from './structure.utils'
 
 const targetPriorities = [
   ['extension', 7],
@@ -22,6 +22,7 @@ const enoughStorage = room => {
   if (room.storage) {
     return room.storage.store[RESOURCE_ENERGY] > 20000
   }
+  return false
 }
 
 const adjustPriority = (structureType, priority, room) => {
@@ -110,8 +111,8 @@ const getTarget = creep => {
     // console.log(`target: ${target}`)
   }
 
-  homeRoom = Game.rooms[creep.memory.homeRoom]
-  chosenTarget = chooseTarget(creep, homeRoom)
+  const homeRoom = Game.rooms[creep.memory.homeRoom]
+  const chosenTarget = chooseTarget(creep, homeRoom)
   if (chosenTarget) {
     creep.memory.target = chosenTarget.id
   }
@@ -119,4 +120,4 @@ const getTarget = creep => {
   return Game.getObjectById(creep.memory.target)
 }
 
-module.exports = getTarget
+export default getTarget

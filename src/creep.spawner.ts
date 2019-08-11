@@ -1,13 +1,9 @@
-const _ = require('lodash')
-const buildBody = require('./creep.buildBody')
+import buildBody from './creep.buildBody'
 
-const countCreeps = role => {
-  const filteredCreeps = _.filter(
-    Game.creeps,
+const countCreeps = (role: string) => {
+  return Object.values(Game.creeps).filter(
     creep => creep.memory.role === role && creep.ticksToLive > 50
   ).length
-
-  return filteredCreeps
 }
 
 const spawnCreepWithRole = (role, room) => {
@@ -20,7 +16,7 @@ const spawnCreepWithRole = (role, room) => {
       memory: { role },
     }
   )
-  if (_.isString(result)) {
+  if (typeof result === 'string') {
     console.log(`The name is: ${result}`)
   }
 }
@@ -39,4 +35,4 @@ const spawnCreeps = (targetState, room) => {
   }
 }
 
-module.exports = spawnCreeps
+export default spawnCreeps

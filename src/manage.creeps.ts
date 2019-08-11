@@ -1,11 +1,11 @@
 const roleHarvester = require('./role.harvester')
 const roleUpgrader = require('./role.upgrader')
-const roleBuilder = require('./role.builder')
-const roleWorker = require('./role.worker')
-const roleCarrier = require('./role.carrier')
-const roleRemoteMiner = require('./role.remoteMiner')
-const roleRemoteCarrier = require('./role.remoteCarrier')
-const setHome = require('./creep.setHome')
+import roleBuilder from './role.builder'
+import roleWorker from './role.worker'
+import roleCarrier from './role.carrier'
+import roleRemoteMiner from './role.remoteMiner'
+import roleRemoteCarrier from './role.remoteCarrier'
+import setHome from './creep.setHome'
 
 const manageCreeps = () => {
   const creepsArray = Object.values(Game.creeps)
@@ -36,4 +36,4 @@ const manageCreeps = () => {
   }
 }
 
-module.exports = manageCreeps
+export default manageCreeps

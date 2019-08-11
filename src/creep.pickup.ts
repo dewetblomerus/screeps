@@ -15,4 +15,4 @@ const pickup = creep => {
   }
 }
 
-module.exports = pickup
+export default pickup

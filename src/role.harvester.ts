@@ -1,4 +1,4 @@
-const pickup = require('./creep.pickup')
+import pickup from './creep.pickup'
 
 const sourceIndex = 1
 const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER]
@@ -66,4 +66,4 @@ const roleHarvester = creep => {
   }
 }
 
-module.exports = roleHarvester
+export default roleHarvester

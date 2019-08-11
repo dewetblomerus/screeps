@@ -19,8 +19,8 @@ const containersAvailable = () => {
   return containers.length > 1
 }
 
-const linksAvailable = () => {
-  const links = Game.spawns.Spawn1.room.find(FIND_STRUCTURES, {
+const linksAvailable = (room: Room) => {
+  const links = room.find(FIND_STRUCTURES, {
     filter: structure => structure.structureType === STRUCTURE_LINK,
   })
   return links.length > 1
@@ -143,4 +143,4 @@ const targetState = room => {
   }
 }
 
-module.exports = targetState
+export default targetState

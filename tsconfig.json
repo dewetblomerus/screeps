@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["esnext"],
+    "target": "es2016",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "baseUrl": "src/",
+    "strict": false,
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "allowUnreachableCode": false,
+    "types": ["screeps", "node"]
+  },
+  "exclude": ["node_modules"]
+}

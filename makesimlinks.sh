@@ -3,7 +3,7 @@
 # This script creates symlinks from the default branch of all screeps servers to this repo
 ############################
 
-dir=$(pwd)
+dir=$(pwd)/dist
 cd ~/Library/Application\ Support/screeps/scripts
 server_dirs=$(ls -d */)
 

@@ -1,5 +1,5 @@
-const chooseSource = creep => {
-  const sourceFromMemory = Game.getObjectById(creep.memory.targetSource)
+const chooseSource = (creep: Creep) => {
+  const sourceFromMemory = Game.getObjectById<Source>(creep.memory.targetSource)
   if (creep.memory.targetSource) {
     return sourceFromMemory
   }
@@ -35,4 +35,4 @@ const roleWorker = creep => {
   }
 }
 
-module.exports = roleWorker
+export default roleWorker

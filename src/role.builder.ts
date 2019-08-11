@@ -1,5 +1,5 @@
-const pickup = require('./creep.pickup')
-const structureUtils = require('./structure.utils')
+import pickup from './creep.pickup'
+import structureUtils from './structure.utils'
 
 const sourceIndex = 1
 
@@ -45,7 +45,7 @@ const roleBuilder = creep => {
 
   if (doneHarvesting(creep)) {
     creep.memory.building = true
-    creep.memory.target = findConstruction.id
+    // creep.memory.target = findConstruction.id
     setTargetId(creep)
     console.log('builder doneHarvesting')
     creep.say('🚧 build')
@@ -94,4 +94,4 @@ const roleBuilder = creep => {
   }
 }
 
-module.exports = roleBuilder
+export default roleBuilder

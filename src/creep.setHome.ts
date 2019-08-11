@@ -5,4 +5,4 @@ const setHome = creep => {
   }
 }
 
-module.exports = setHome
+export default setHome

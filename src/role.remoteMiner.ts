@@ -9,7 +9,7 @@ const roleRemoteMiner = creep => {
   const flag = chooseFlag()
   if (!creep.memory.sourceId) {
     console.log('there is no sourceId in the memory')
-    range = creep.pos.getRangeTo(flag.pos)
+    const range = creep.pos.getRangeTo(flag.pos)
     if (range > 1) {
       console.log('moving to flag')
       creep.moveTo(flag.pos)
@@ -26,10 +26,10 @@ const roleRemoteMiner = creep => {
     }
   }
 
-  const source = Game.getObjectById(creep.memory.sourceId)
+  const source = Game.getObjectById<Source>(creep.memory.sourceId)
   if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
     creep.moveTo(source.pos, { visualizePathStyle: { stroke: '#ffaa00' } })
   }
 }
 
-module.exports = roleRemoteMiner
+export default roleRemoteMiner

@@ -1,8 +1,8 @@
 const towerManager = {
-  run(room) {
+  run(room: Room) {
     const towers = room.find(FIND_MY_STRUCTURES, {
       filter: { structureType: STRUCTURE_TOWER },
-    })
+    }) as StructureTower[]
 
     for (const tower of towers) {
       if (tower) {
@@ -26,9 +26,9 @@ const towerManager = {
           // console.log('there is a hostile')
           tower.attack(closestHostile)
           // console.log(`attack result: ${result}`)
-        } else if (damagedCreep.name) {
+        } else if (damagedCreep) {
           // console.log(`healing: ${damagedCreep}`)
-          tower.heal(damagedCreep)
+          tower.heal(damagedCreep[0])
         } else if (closestDamagedStructure) {
           // console.log(`repairing: ${closestDamagedStructure}`)
           tower.repair(closestDamagedStructure)
@@ -38,4 +38,4 @@ const towerManager = {
   },
 }
 
-module.exports = towerManager
+export default towerManager

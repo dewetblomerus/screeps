@@ -1,4 +1,4 @@
-const structureUtils = require('./structure.utils')
+import structureUtils from './structure.utils'
 
 const minEnergyToMove = 300
 
@@ -123,4 +123,4 @@ const chooseSupply = creep => {
 
 const getSupply = creep => chooseSupply(creep)
 
-module.exports = getSupply
+export default getSupply

@@ -7,4 +7,4 @@ const clearMemory = () => {
   }
 }
 
-module.exports = clearMemory
+export default clearMemory

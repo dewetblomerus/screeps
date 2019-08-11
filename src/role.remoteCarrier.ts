@@ -1,5 +1,5 @@
-const getSupply = require('./creep.getSupply')
-const getTarget = require('./creep.getTarget')
+import getSupply from './creep.getSupply'
+import getTarget from './creep.getTarget'
 
 const deposit = creep => {
   const target = getTarget(creep)
@@ -47,4 +47,4 @@ const roleRemoteCarrier = creep => {
   }
 }
 
-module.exports = roleRemoteCarrier
+export default roleRemoteCarrier

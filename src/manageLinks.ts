@@ -1,4 +1,4 @@
-const structureUtils = require('./structure.utils')
+import structureUtils from './structure.utils'
 
 const notEnoughStorage = (room, upgraderLink) =>
   room.storage.store[RESOURCE_ENERGY] < 10000 || upgraderLink.energy > 700
@@ -43,7 +43,7 @@ const manageLinks = room => {
   ])[0]
 
   for (const link of sourceLinks) {
-    runSourceLink(link, storageLink, upgraderLink)
+    runSourceLink(link)
   }
 
   if (storageLink) {
@@ -51,4 +51,4 @@ const manageLinks = room => {
   }
 }
 
-module.exports = manageLinks
+export default manageLinks

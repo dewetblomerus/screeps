@@ -81,4 +81,4 @@ const structureUtils = {
   },
 }
 
-module.exports = structureUtils
+export default structureUtils

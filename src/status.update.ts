@@ -1,12 +1,7 @@
-const _ = require('lodash')
-
-const countCreeps = role => {
-  const filteredCreeps = _.filter(
-    Game.creeps,
+const countCreeps = (role: string) => {
+  return Object.values(Game.creeps).filter(
     creep => creep.memory.role === role && creep.ticksToLive > 50
   ).length
-
-  return filteredCreeps
 }
 
 const statusUpdate = (targetState, room) => {
@@ -22,11 +17,9 @@ const statusUpdate = (targetState, room) => {
     return `${role}: 0`
   })}`
 
-  const energyUpdate = `Energy: ${room.energyAvailable}/${
-    room.energyCapacityAvailable
-  }`
+  const energyUpdate = `Energy: ${room.energyAvailable}/${room.energyCapacityAvailable}`
 
   console.log(`${populationUpdate} ${energyUpdate}`)
 }
 
-module.exports = statusUpdate
+export default statusUpdate

@@ -108,15 +108,15 @@ const nextBodyPart = ({ body, role }) => {
   return maxPriority
 }
 
-const buildBody = (role, room) => {
+const buildBody = (role: string, room: Room) => {
   const budget = realisticBudget(room, role)
-  const body = []
+  const body: BodyPartConstant[] = []
 
   while (
-    bodyCost([...body, nextBodyPart({ body, role, room })]) <= budget &&
+    bodyCost([...body, nextBodyPart({ body, role })]) <= budget &&
     body.length < 50
   ) {
-    body.push(nextBodyPart({ body, role, room }))
+    body.push(nextBodyPart({ body, role }))
   }
 
   // console.log(body)
@@ -124,4 +124,4 @@ const buildBody = (role, room) => {
   return body
 }
 
-module.exports = buildBody
+export default buildBody

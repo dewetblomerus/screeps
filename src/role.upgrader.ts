@@ -1,4 +1,4 @@
-const pickup = require('./creep.pickup')
+import pickup from './creep.pickup'
 
 const sourceIndex = 1
 const sourceStructureTypes = [
@@ -74,4 +74,4 @@ const roleUpgrader = creep => {
   }
 }
 
-module.exports = roleUpgrader
+export default roleUpgrader
