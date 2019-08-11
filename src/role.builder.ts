@@ -39,7 +39,6 @@ const chooseSite = creep => {
 const roleBuilder = creep => {
   if (doneBuilding(creep)) {
     creep.memory.building = false
-    console.log('builder doneBuilding')
     creep.say('🔄 harvest')
   }
 
@@ -47,7 +46,6 @@ const roleBuilder = creep => {
     creep.memory.building = true
     // creep.memory.target = findConstruction.id
     setTargetId(creep)
-    console.log('builder doneHarvesting')
     creep.say('🚧 build')
   }
 
