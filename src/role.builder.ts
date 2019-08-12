@@ -19,42 +19,38 @@ const chooseSource = creep => {
 
 const findConstruction = creep => creep.room.find(FIND_CONSTRUCTION_SITES)[0]
 
-const setTargetId = creep => {
-  creep.memory.target = findConstruction(creep).id
+const setBuildingId = creep => {
+  creep.memory.site = findConstruction(creep).id
   console.log(`builder setting target: ${creep.memory.target}`)
 }
 
 const doneHarvesting = creep =>
-  !creep.memory.building && creep.carry.energy === creep.carryCapacity
+  !creep.memory.site && creep.carry.energy === creep.carryCapacity
 
-const doneBuilding = creep => creep.memory.building && creep.carry.energy === 0
+const doneBuilding = creep => creep.memory.site && creep.carry.energy === 0
 
 const chooseSite = creep => {
-  if (Game.getObjectById(creep.memory.target)) {
-    return Game.getObjectById(creep.memory.target)
+  if (Game.getObjectById(creep.memory.site)) {
+    return Game.getObjectById(creep.memory.site)
   }
   return findConstruction(creep)
 }
 
 const roleBuilder = creep => {
   if (doneBuilding(creep)) {
-    creep.memory.building = false
+    creep.memory.site = false
     creep.say('🔄 harvest')
   }
 
   if (doneHarvesting(creep)) {
-    creep.memory.building = true
-    // creep.memory.target = findConstruction.id
-    setTargetId(creep)
+    creep.memory.site = true
+    setBuildingId(creep)
     creep.say('🚧 build')
   }
 
-  if (creep.memory.building) {
-    // console.log(`${target.progress}/${target.progressTotal}`);
+  if (creep.memory.site) {
     const targets = creep.room.find(FIND_CONSTRUCTION_SITES)
     const target = chooseSite(creep)
-    // console.log(`in progress: ${target}`);
-    // console.log(`builder target: ${creep.memory.target}`);
     if (targets.length) {
       if (creep.build(target) === ERR_NOT_IN_RANGE) {
         // target building code
