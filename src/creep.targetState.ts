@@ -3,7 +3,7 @@ const creepsInRoom = () => {
   return allCreepsCount
 }
 
-const startingOut = creepsCount => creepsCount < 1
+const startingOut = (creepsCount: Number) => creepsCount < 1
 
 const building = () => {
   const constructionSites = Game.spawns.Spawn1.room.find(
@@ -52,21 +52,21 @@ const useContainers = () => {
   }
 }
 
-const loaded = room => {
+const loaded = (room: Room) => {
   if (room.storage) {
     return room.storage.store[RESOURCE_ENERGY] > 200000
   }
   return false
 }
 
-const buffer = room => {
+const buffer = (room: Room) => {
   if (room.storage) {
     return room.storage.store[RESOURCE_ENERGY] > 1000
   }
   return false
 }
 
-const useLinks = room => {
+const useLinks = (room: Room) => {
   // console.log('using containers')
   if (building()) {
     // console.log('building')
@@ -96,7 +96,7 @@ const useLinks = room => {
   }
 }
 
-const targetState = room => {
+const targetState = (room: Room) => {
   remoteMiners()
   // console.log('inside targetState')
   if (startingOut(creepsInRoom())) {

@@ -11,12 +11,13 @@ const supplyStructurePriorities = [
   ['storage', 10],
 ]
 
-const notEnoughStorage = room => room.storage.store[RESOURCE_ENERGY] < 50000
+const notEnoughInStorage = (room: Room) =>
+  room.storage && room.storage.store[RESOURCE_ENERGY] < 50000
 
-const prioritizeUpgrading = room => {
+const prioritizeUpgrading = (room: Room) => {
   const upgraderStructure = structureUtils.upgraderStructures(room)[0]
 
-  if (upgraderStructure.structureType === STRUCTURE_LINK) {
+  if (room.storage && upgraderStructure.structureType === STRUCTURE_LINK) {
     return (
       upgraderStructure.energy < 500 &&
       room.storage.store[RESOURCE_ENERGY] > 5000
@@ -26,23 +27,25 @@ const prioritizeUpgrading = room => {
   return false
 }
 
-const adjustPriority = (structureType, priority, room) => {
-  if (structureType === 'storage') {
-    if (room.storage) {
-      if (notEnoughStorage(room)) {
-        return priority - 1
-      }
-
-      if (prioritizeUpgrading(room)) {
-        return priority + 1
-      }
+const adjustPriority = (
+  structureType: StructureConstant,
+  priority: number,
+  room: Room
+): number => {
+  if (room.storage && structureType === 'storage') {
+    if (notEnoughInStorage(room)) {
+      return priority - 1
     }
-    return priority
+
+    if (prioritizeUpgrading(room)) {
+      return priority + 1
+    }
   }
 
   return priority
 }
 
+// @ts-ignore
 const containsEnergy = structure => {
   if (storeTypes.includes(structure.structureType)) {
     return structure.store[RESOURCE_ENERGY]
@@ -50,41 +53,46 @@ const containsEnergy = structure => {
   return structure.energy
 }
 
+// @ts-ignore
 const containsMinEnergy = structure =>
   containsEnergy(structure) > minEnergyToMove
 
-const adjustedPriorities = creep => {
+const adjustedPriorities = (creep: Creep) => {
   return supplyStructurePriorities.map(([structureType, priority]) => [
     structureType,
+    // @ts-ignore
     adjustPriority(structureType, priority, creep.room),
   ])
 }
 
-const supplyStructures = creep => {
-  if (structureUtils.storageLink(creep.room)) {
+const supplyStructures = (creep: Creep) => {
+  if (structureUtils.linkNearStorage(creep.room)) {
     // console.log('there is a supply link')
-    if (structureUtils.storageLink(creep.room).energy > minEnergyToMove) {
+    // @ts-ignore
+    if (structureUtils.linkNearStorage(creep.room).energy > minEnergyToMove) {
       // console.log('it has enough')
-      return structureUtils.storageLink(creep.room)
+      return structureUtils.linkNearStorage(creep.room)
     }
   }
 
   return creep.room.find(FIND_STRUCTURES, {
     filter: structure =>
+      // @ts-ignore
       supplyTypes.includes(structure.structureType) &&
       containsMinEnergy(structure) &&
-      structureUtils.isSourceStructure(structure),
+      structureUtils.isStructureNearSource(structure),
   })
 }
 
-const anyStructures = creep =>
+const anyStructures = (creep: Creep) =>
   creep.room.find(FIND_STRUCTURES, {
     filter: structure =>
+      // @ts-ignore
       supplyTypes.includes(structure.structureType) &&
       containsMinEnergy(structure),
   })
 
-const chooseStructureType = creep => {
+const chooseStructureType = (creep: Creep) => {
   const structures = anyStructures(creep)
 
   const structureTypesWithEnergy = structures.map(
@@ -104,7 +112,7 @@ const chooseStructureType = creep => {
   return STRUCTURE_STORAGE
 }
 
-const chooseSupply = creep => {
+const chooseSupply = (creep: Creep) => {
   const structureType = chooseStructureType(creep)
   if (structureType === STRUCTURE_STORAGE) {
     return creep.room.storage
@@ -116,11 +124,9 @@ const chooseSupply = creep => {
     )
   }
 
-  if (structureType === STRUCTURE_LINK) {
-    return structureUtils.storageLink(creep.room)
-  }
+  return structureUtils.linkNearStorage(creep.room)
 }
 
-const getSupply = creep => chooseSupply(creep)
+const getSupply = (creep: Creep) => chooseSupply(creep)
 
 export default getSupply

@@ -1,53 +1,64 @@
 import structureUtils from './structure.utils'
 
-const notEnoughStorage = (room, upgraderLink) =>
-  room.storage.store[RESOURCE_ENERGY] < 10000 || upgraderLink.energy > 700
+const notEnoughInStorage = (room: Room, linkNearController: StructureLink) => {
+  if (room.storage) {
+    room.storage.store[RESOURCE_ENERGY] < 10000 ||
+      linkNearController.energy > 700
+  }
+}
 
-const linkNeedingEnergy = room => {
+const linkNeedingEnergy = (room: Room) => {
   const upgraderLink = structureUtils.upgraderStructures(room, [
     STRUCTURE_LINK,
   ])[0]
 
   if (room.storage) {
-    if (notEnoughStorage(room, upgraderLink)) {
-      return structureUtils.storageLink(room)
+    // @ts-ignore
+    if (notEnoughInStorage(room, upgraderLink)) {
+      return structureUtils.linkNearStorage(room)
     }
   }
 
+  // @ts-ignore
   if (upgraderLink.energy < upgraderLink.energyCapacity) {
     return upgraderLink
   }
 
-  return structureUtils.storageLink(room)
+  return structureUtils.linkNearStorage(room)
 }
 
-const runSourceLink = link => {
+const runLinkNearSource = (link: StructureLink) => {
+  // @ts-ignore
   const result = link.transferEnergy(linkNeedingEnergy(link.room))
   // console.log(`result: ${result}`)
 }
 
-const runStorageLink = link => {
+const runLinkNearStorage = (link: StructureLink) => {
+  // @ts-ignore
   const result = link.transferEnergy(linkNeedingEnergy(link.room))
   // console.log(`result: ${result}`)
 }
 
-const manageLinks = room => {
+const manageLinks = (room: Room) => {
   // console.log(`manage some links for room: ${room}`)
-  const sourceLinks = structureUtils.sourceStructures(room, [STRUCTURE_LINK])
+  const linksNearSources = structureUtils.sourceStructures(room, [
+    STRUCTURE_LINK,
+  ])
   // console.log(`sourceLinks: ${sourceLinks}`)
 
-  const storageLink = structureUtils.storageLink(room)
-  // console.log(storageLink)
+  const linkNearStorage = structureUtils.linkNearStorage(room)
   const upgraderLink = structureUtils.upgraderStructures(room, [
     STRUCTURE_LINK,
   ])[0]
 
-  for (const link of sourceLinks) {
-    runSourceLink(link)
+  for (const link of linksNearSources) {
+    // @ts-ignore
+    runLinkNearSource(link)
   }
 
-  if (storageLink) {
-    runStorageLink(storageLink)
+  if (linkNearStorage) {
+    // @ts-ignore
+    runLinkNearStorage(linkNearStorage)
   }
 }
 

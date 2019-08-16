@@ -7,21 +7,24 @@ const sourceStructureTypes = [
   STRUCTURE_LINK,
 ]
 
-const chooseSource = creep => {
+const chooseSource = (creep: Creep) => {
   const sources = creep.room.find(FIND_SOURCES)
   return sources[sourceIndex]
 }
 
-const assignSourceStructure = creep => {
+const assignSourceStructure = (creep: Creep) => {
   const sourceStructures = creep.room.find(FIND_STRUCTURES, {
+    //@ts-ignore
     filter: s => sourceStructureTypes.includes(s.structureType),
   })
 
+  //@ts-ignore
   const closeSourceStructures = creep.room.controller.pos.findInRange(
     sourceStructures,
     10
   )
 
+  //@ts-ignore
   const closest = creep.room.controller.pos.findClosestByRange(
     closeSourceStructures
   )
@@ -31,7 +34,7 @@ const assignSourceStructure = creep => {
   }
 }
 
-const roleUpgrader = creep => {
+const roleUpgrader = (creep: Creep) => {
   if (!creep.memory.sourceStructure) {
     // console.log('I have no sourceStructure')
     assignSourceStructure(creep)
@@ -43,15 +46,20 @@ const roleUpgrader = creep => {
   }
   if (!creep.memory.upgrading && creep.carry.energy === creep.carryCapacity) {
     creep.memory.upgrading = true
-    creep.memory.target = creep.room.controller.id
+    if (creep.room.controller) {
+      creep.memory.target = creep.room.controller.id
+    } else {
+      console.log('Help! I have no controller!!!')
+    }
     // console.log(`${creep.name} is now upgrading`);
     creep.say('⚡ upgrade')
   }
 
-  if (creep.memory.upgrading) {
+  if (creep.memory.upgrading && creep.room.controller) {
     if (creep.upgradeController(creep.room.controller) === ERR_NOT_IN_RANGE) {
       // console.log(`${creep.name} is now moving to the controller`);
       const target = Game.getObjectById(creep.memory.target)
+      // @ts-ignore
       creep.moveTo(target, {
         // maxRooms: 1,
         visualizePathStyle: { stroke: '#ffffff' },
@@ -59,8 +67,10 @@ const roleUpgrader = creep => {
     }
   } else if (Game.getObjectById(creep.memory.sourceStructure)) {
     const sourceStructure = Game.getObjectById(creep.memory.sourceStructure)
+    // @ts-ignore
     if (creep.withdraw(sourceStructure, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
       // console.log('not in range');
+      // @ts-ignore
       creep.moveTo(sourceStructure, {
         visualizePathStyle: { stroke: '#ffaa00' },
       })

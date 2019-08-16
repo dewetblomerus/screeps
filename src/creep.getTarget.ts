@@ -1,6 +1,8 @@
 import structureUtils from './structure.utils'
 
-const targetPriorities = [
+type PriorityStructure = [StructureConstant, number]
+
+const targetPriorities: PriorityStructure[] = [
   ['extension', 7],
   ['spawn', 6],
   ['tower', 5],
@@ -18,14 +20,18 @@ const targetTypes = [
   STRUCTURE_LINK,
 ]
 
-const enoughStorage = room => {
+const enoughStorage = (room: Room) => {
   if (room.storage) {
     return room.storage.store[RESOURCE_ENERGY] > 20000
   }
   return false
 }
 
-const adjustPriority = (structureType, priority, room) => {
+const adjustPriority = (
+  structureType: StructureConstant,
+  priority: number,
+  room: Room
+): number => {
   if (structureType === 'storage') {
     if (!enoughStorage(room)) {
       return 4
@@ -35,21 +41,24 @@ const adjustPriority = (structureType, priority, room) => {
   return priority
 }
 
-const adjustedPriorities = room => {
-  return targetPriorities.map(([structureType, priority]) => [
-    structureType,
-    adjustPriority(structureType, priority, room),
-  ])
+const adjustedPriorities = (room: Room): PriorityStructure[] => {
+  return targetPriorities.map<PriorityStructure>(
+    ([structureType, priority]) => [
+      structureType,
+      adjustPriority(structureType, priority, room),
+    ]
+  )
 }
 
-const targetsNeedingEnergy = room =>
+const targetsNeedingEnergy = (room: Room) =>
   room.find(FIND_STRUCTURES, {
     filter: structure =>
+      // @ts-ignore
       targetTypes.includes(structure.structureType) &&
       !structureUtils.full(structure),
   })
 
-const chooseStructureType = room => {
+const chooseStructureType = (room: Room) => {
   const structures = targetsNeedingEnergy(room)
   const structureTypesNeedingEnergy = structures.map(
     structure => structure.structureType
@@ -75,21 +84,26 @@ const chooseStructureType = room => {
   return STRUCTURE_SPAWN
 }
 
-const structuresOfType = (room, structureType) =>
+const structuresOfType = (
+  room: Room,
+  structureType: StructureStorage | StructureContainer
+) =>
   room.find(FIND_STRUCTURES, {
     filter: structure =>
+      // @ts-ignore
       structure.structureType === structureType &&
+      // @ts-ignore
       structure.energy < structure.energyCapacity,
   })
 
-const destinationContainers = room =>
+const destinationContainers = (room: Room) =>
   room.find(FIND_STRUCTURES, {
     filter: s =>
       s.structureType === STRUCTURE_CONTAINER &&
       s.pos.findInRange(FIND_SOURCES, 2).length === 0,
   })
 
-const chooseTarget = (creep, room) => {
+const chooseTarget = (creep: Creep, room: Room) => {
   const structureType = chooseStructureType(room)
   if (structureType === STRUCTURE_STORAGE) {
     return room.storage
@@ -99,24 +113,27 @@ const chooseTarget = (creep, room) => {
     return creep.pos.findClosestByRange(destinationContainers(room))
   }
 
+  // @ts-ignore
   const potentialTargets = structuresOfType(room, structureType)
   const newTarget = creep.pos.findClosestByRange(potentialTargets)
   return newTarget
 }
 
-const getTarget = creep => {
+const getTarget = (creep: Creep): StructureStorage => {
   // console.log('getTarget')
   if (creep.memory.target) {
     // const target = Game.getObjectById(creep.memory.target)
     // console.log(`target: ${target}`)
   }
 
+  // @ts-ignore
   const homeRoom = Game.rooms[creep.memory.homeRoom]
   const chosenTarget = chooseTarget(creep, homeRoom)
   if (chosenTarget) {
     creep.memory.target = chosenTarget.id
   }
 
+  // @ts-ignore
   return Game.getObjectById(creep.memory.target)
 }
 

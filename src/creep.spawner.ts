@@ -1,12 +1,8 @@
 import buildBody from './creep.buildBody'
+import { countCreeps } from './creep/utils'
+import { TargetState, Role } from './config'
 
-const countCreeps = (role: string) => {
-  return Object.values(Game.creeps).filter(
-    creep => creep.memory.role === role && creep.ticksToLive > 50
-  ).length
-}
-
-const spawnCreepWithRole = (role, room) => {
+const spawnCreepWithRole = (role: Role, room: Room) => {
   const builtBody = buildBody(role, room)
 
   const result = Game.spawns.Spawn1.spawnCreep(
@@ -21,16 +17,19 @@ const spawnCreepWithRole = (role, room) => {
   }
 }
 
-const spawnCreeps = (targetState, room) => {
+const spawnCreeps = (targetState: TargetState, room: Room) => {
   const neededRoles = Object.keys(targetState).filter(
+    // @ts-ignore
     role => countCreeps(role) < targetState[role].amount
   )
 
   if (neededRoles.length > 0) {
     const roleToSpawn = neededRoles.reduce((a, b) =>
+      // @ts-ignore
       targetState[a].priority < targetState[b].priority ? a : b
     )
 
+    // @ts-ignore
     spawnCreepWithRole(roleToSpawn, room)
   }
 }

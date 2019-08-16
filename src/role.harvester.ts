@@ -3,20 +3,23 @@ import pickup from './creep.pickup'
 const sourceIndex = 1
 const targetTypes = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER]
 
-const chooseSource = creep => {
+const chooseSource = (creep: Creep) => {
   const sources = creep.room.find(FIND_SOURCES)
   return sources[sourceIndex]
 }
 
-const targets = creep =>
+const targets = (creep: Creep) =>
   creep.room.find(FIND_STRUCTURES, {
     filter: structure =>
+      // @ts-ignore
       targetTypes.includes(structure.structureType) &&
+      // @ts-ignore
       structure.energy < structure.energyCapacity,
   })
 
-const chooseTarget = creep => {
+const chooseTarget = (creep: Creep) => {
   const sortedTargetsRange = targets(creep).sort(
+    // @ts-ignore
     (a, b) => creep.pos.getRangeTo(a) > creep.pos.getRangeTo(b)
   )
 
@@ -33,7 +36,7 @@ const chooseTarget = creep => {
   return sortedTargetsRange[0]
 }
 
-const roleHarvester = creep => {
+const roleHarvester = (creep: Creep) => {
   if (creep.memory.depositing && creep.carry.energy === 0) {
     // console.log(`Stop Depositing`)
     creep.memory.depositing = false

@@ -3,7 +3,7 @@ import structureUtils from './structure.utils'
 
 const sourceIndex = 1
 
-const chooseSourceBuilding = creep => {
+const chooseSourceBuilding = (creep: Creep) => {
   const sourceBuilding = creep.pos.findClosestByPath(
     structureUtils.energyStructures(creep.room, creep.carryCapacity)
   )
@@ -12,38 +12,41 @@ const chooseSourceBuilding = creep => {
   return sourceBuilding
 }
 
-const chooseSource = creep => {
+const chooseSource = (creep: Creep) => {
   const sources = creep.room.find(FIND_SOURCES)
   return sources[sourceIndex]
 }
 
-const findConstruction = creep => creep.room.find(FIND_CONSTRUCTION_SITES)[0]
+const findConstruction = (creep: Creep) =>
+  creep.room.find(FIND_CONSTRUCTION_SITES)[0]
 
-const setBuildingId = creep => {
+const setBuildingId = (creep: Creep) => {
   creep.memory.site = findConstruction(creep).id
   console.log(`builder setting target: ${creep.memory.target}`)
 }
 
-const doneHarvesting = creep =>
+const doneHarvesting = (creep: Creep) =>
   !creep.memory.site && creep.carry.energy === creep.carryCapacity
 
-const doneBuilding = creep => creep.memory.site && creep.carry.energy === 0
+const doneBuilding = (creep: Creep) =>
+  creep.memory.site && creep.carry.energy === 0
 
-const chooseSite = creep => {
+const chooseSite = (creep: Creep): ConstructionSite => {
   if (Game.getObjectById(creep.memory.site)) {
+    // @ts-ignore
     return Game.getObjectById(creep.memory.site)
   }
   return findConstruction(creep)
 }
 
-const roleBuilder = creep => {
+const roleBuilder = (creep: Creep) => {
   if (doneBuilding(creep)) {
-    creep.memory.site = false
+    delete creep.memory.site
     creep.say('🔄 harvest')
   }
 
   if (doneHarvesting(creep)) {
-    creep.memory.site = true
+    delete creep.memory.site
     setBuildingId(creep)
     creep.say('🚧 build')
   }
@@ -71,6 +74,7 @@ const roleBuilder = creep => {
       // const source = getSource(creep)
       // console.log(source);
       if (
+        // @ts-ignore
         creep.withdraw(sourceBuilding, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE
       ) {
         // console.log('not in range');

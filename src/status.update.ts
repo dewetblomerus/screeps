@@ -1,10 +1,7 @@
-const countCreeps = (role: string) => {
-  return Object.values(Game.creeps).filter(
-    creep => creep.memory.role === role && creep.ticksToLive > 50
-  ).length
-}
+import { countCreeps } from './creep/utils'
+import { TargetState, Role } from './config'
 
-const statusUpdate = (targetState, room) => {
+const statusUpdate = (targetState: TargetState, room: Room) => {
   if (Game.time % 10 !== 0) {
     return
   }
@@ -12,6 +9,7 @@ const statusUpdate = (targetState, room) => {
   const populationUpdate = `Population:${Object.keys(targetState).map(role => {
     // console.log(role)
     if (countCreeps(role) > 0) {
+      // @ts-ignore
       return ` ${role}: ${countCreeps(role)}/${targetState[role].amount}`
     }
     return `${role}: 0`

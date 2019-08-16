@@ -1,6 +1,6 @@
-const chooseSource = (creep: Creep) => {
+const chooseSource = (creep: Creep): Source => {
   const sourceFromMemory = Game.getObjectById<Source>(creep.memory.targetSource)
-  if (creep.memory.targetSource) {
+  if (sourceFromMemory) {
     return sourceFromMemory
   }
 
@@ -21,10 +21,11 @@ const chooseSource = (creep: Creep) => {
   return untargetedSources[0]
 }
 
-const roleWorker = creep => {
+const roleWorker = (creep: Creep) => {
   if (creep.carry.energy === creep.carryCapacity) {
     creep.say('🔄 drop')
     for (const resourceType in creep.carry) {
+      // @ts-ignore
       creep.drop(resourceType)
     }
   } else {

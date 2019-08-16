@@ -1,7 +1,7 @@
 import getSupply from './creep.getSupply'
 import getTarget from './creep.getTarget'
 
-const deposit = creep => {
+const deposit = (creep: Creep) => {
   const target = getTarget(creep)
   if (target) {
     if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
@@ -12,7 +12,7 @@ const deposit = creep => {
   }
 }
 
-const roleRemoteCarrier = creep => {
+const roleRemoteCarrier = (creep: Creep) => {
   if (creep.memory.depositing && creep.carry.energy === 0) {
     creep.memory.depositing = false
     creep.say('🔄 collect')
@@ -20,7 +20,7 @@ const roleRemoteCarrier = creep => {
 
   if (!creep.memory.depositing && creep.carry.energy === creep.carryCapacity) {
     creep.memory.depositing = true
-    creep.memory.target = getTarget(creep)
+    creep.memory.target = getTarget(creep).id
     creep.say('deposit')
   }
 
@@ -28,20 +28,19 @@ const roleRemoteCarrier = creep => {
     deposit(creep)
   } else {
     const dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES)
-    if (dropped) {
-      if (dropped.amount > 300) {
-        // console.log('there is more than 300')
-        if (dropped) {
-          if (creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(dropped)
-          }
-          return
-        }
+    if (dropped && dropped.amount > 300) {
+      // console.log('there is more than 300')
+      if (creep.pickup(dropped) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(dropped)
       }
+      return
     }
 
     const supply = getSupply(creep)
-    if (creep.withdraw(supply, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
+    if (
+      supply &&
+      creep.withdraw(supply, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE
+    ) {
       creep.moveTo(supply, { visualizePathStyle: { stroke: '#ffaa00' } })
     }
   }

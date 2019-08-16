@@ -1,4 +1,4 @@
-const pickup = creep => {
+const pickup = (creep: Creep) => {
   // console.log('running pickup function')
   const dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES)
   if (dropped) {

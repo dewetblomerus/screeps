@@ -1,3 +1,5 @@
+import { Role } from './config'
+
 const bodyPriorities = {
   worker: [[WORK, 3], [CARRY, 1], [MOVE, 1]],
   carrier: [[CARRY, 2], [MOVE, 1]],
@@ -29,10 +31,11 @@ const bodyPartCost = {
   move: 50,
 }
 
-const bodyCost = body =>
+const bodyCost = (body: Array<BodyPartConstant>) =>
+  // @ts-ignore
   body.reduce((prev, bodyPart) => prev + bodyPartCost[bodyPart], 0)
 
-const bodyBudget = room => {
+const bodyBudget = (room: Room) => {
   if (countCreepsInRoom() < 2) {
     if (room.energyAvailable > 300) {
       return room.energyAvailable
@@ -43,7 +46,7 @@ const bodyBudget = room => {
   return room.energyCapacityAvailable
 }
 
-const upgraderBudget = room => {
+const upgraderBudget = (room: Room) => {
   if (room.find(FIND_CONSTRUCTION_SITES).length > 0) {
     return 200
   }
@@ -68,7 +71,7 @@ const upgraderBudget = room => {
   return bodyBudget(room)
 }
 
-const realisticBudget = (room, role) => {
+const realisticBudget = (room: Room, role: Role) => {
   if (role === 'upgrader') {
     return upgraderBudget(room)
   }
@@ -80,10 +83,18 @@ const realisticBudget = (room, role) => {
   return bodyBudget(room)
 }
 
-const countInBody = (body, bodyPart) =>
+const countInBody = (
+  body: Array<BodyPartConstant>,
+  bodyPart: BodyPartConstant
+) =>
   body.reduce((total, thisPart) => total + (thisPart === bodyPart ? 1 : 0), 0)
 
-const adjustPriority = (body, bodyPart, priority) => {
+const adjustPriority = (
+  body: Array<BodyPartConstant>,
+  bodyPart: BodyPartConstant,
+  priority: Number
+) => {
+  // @ts-ignore
   const normalizedPriority = priority * 10
   if (countInBody(body, bodyPart) === 0) {
     return normalizedPriority * 10
@@ -91,9 +102,16 @@ const adjustPriority = (body, bodyPart, priority) => {
   return normalizedPriority / countInBody(body, bodyPart)
 }
 
-const nextBodyPart = ({ body, role }) => {
+const nextBodyPart = ({
+  body,
+  role,
+}: {
+  body: Array<BodyPartConstant>
+  role: Role
+}) => {
   const priorities = bodyPriorities[role]
 
+  // @ts-ignore
   const currentPriorities = priorities.map(([bodyPart, priority]) => [
     bodyPart,
     adjustPriority(body, bodyPart, priority),
@@ -101,6 +119,7 @@ const nextBodyPart = ({ body, role }) => {
 
   // console.log(`currentPriorities: ${currentPriorities}`)
 
+  // @ts-ignore
   const maxPriority = currentPriorities.reduce((max, priority) =>
     priority[1] > max[1] ? priority : max
   )[0]
@@ -108,7 +127,7 @@ const nextBodyPart = ({ body, role }) => {
   return maxPriority
 }
 
-const buildBody = (role: string, room: Room) => {
+const buildBody = (role: Role, room: Room) => {
   const budget = realisticBudget(room, role)
   const body: BodyPartConstant[] = []
 
