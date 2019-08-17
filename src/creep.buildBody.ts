@@ -12,7 +12,7 @@ const bodyPriorities = {
 
 const bodyBudgets = {
   worker: 800,
-  carrier: 1000,
+  carrier: 800,
   harvester: 1000,
   upgrader: 1000,
   builder: 1000,

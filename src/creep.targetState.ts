@@ -1,3 +1,5 @@
+const debug = false
+
 const creepsInRoom = () => {
   const allCreepsCount = Object.keys(Game.creeps).length
   return allCreepsCount
@@ -86,9 +88,11 @@ const useLinks = (room: Room) => {
     }
   }
 
-  // console.log('returningDefault')
+  if (debug) {
+    console.log('returningDefault')
+  }
   return {
-    worker: { amount: 2, priority: 0 },
+    worker: { amount: 2, priority: 1 },
     carrier: { amount: 1, priority: 1 },
     upgrader: { amount: 1, priority: 2 },
     remoteMiner: { amount: remoteMiners(), priority: 3 },
@@ -98,8 +102,10 @@ const useLinks = (room: Room) => {
 
 const targetState = (room: Room) => {
   remoteMiners()
-  // console.log('inside targetState')
   if (startingOut(creepsInRoom())) {
+    if (debug) {
+      console.log('startingOut')
+    }
     if (buffer(room)) {
       if (Game.time % 10 === 0) {
         console.log('restarting with a buffer')
