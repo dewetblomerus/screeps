@@ -1,13 +1,22 @@
 import { StructureStoringEnergy } from 'config'
 
-const SOURCE_STRUCTURE_TYPES = [STRUCTURE_CONTAINER, STRUCTURE_LINK]
-const UPGRADER_STRUCTURE_TYPES = [STRUCTURE_CONTAINER, STRUCTURE_LINK]
-const RESOURCE_STRUCTURE_TYPES = [
+const SOURCE_STRUCTURE_TYPES: StructureConstant[] = [
+  STRUCTURE_CONTAINER,
+  STRUCTURE_LINK,
+]
+const UPGRADER_STRUCTURE_TYPES: StructureConstant[] = [
+  STRUCTURE_CONTAINER,
+  STRUCTURE_LINK,
+]
+const RESOURCE_STRUCTURE_TYPES: StructureConstant[] = [
   STRUCTURE_CONTAINER,
   STRUCTURE_LINK,
   STRUCTURE_STORAGE,
 ]
-const STORE_STRUCTURE_TYPES = [STRUCTURE_CONTAINER, STRUCTURE_STORAGE]
+const STORE_STRUCTURE_TYPES: StructureConstant[] = [
+  STRUCTURE_CONTAINER,
+  STRUCTURE_STORAGE,
+]
 
 const structureUtils = {
   destinationContainers(room: Room) {
@@ -21,7 +30,6 @@ const structureUtils = {
   energyStructures(room: Room, minEnergy = 50) {
     return room.find(FIND_MY_STRUCTURES, {
       filter: structure =>
-        // @ts-ignore
         RESOURCE_STRUCTURE_TYPES.includes(structure.structureType) &&
         // @ts-ignore
         structureUtils.containsEnergy(structure) >= minEnergy,
@@ -29,7 +37,6 @@ const structureUtils = {
   },
 
   containsEnergy(structure: StructureStoringEnergy) {
-    // @ts-ignore
     if (STORE_STRUCTURE_TYPES.includes(structure.structureType)) {
       // @ts-ignore
       return structure.store[RESOURCE_ENERGY]
@@ -39,7 +46,6 @@ const structureUtils = {
   },
 
   isStructureNearSource(structure: Structure) {
-    // @ts-ignore
     if (SOURCE_STRUCTURE_TYPES.includes(structure.structureType)) {
       return structure.pos.findInRange(FIND_SOURCES, 2).length > 0
     }
@@ -47,7 +53,6 @@ const structureUtils = {
   },
 
   isUpgraderStructure(structure: Structure) {
-    // @ts-ignore
     if (UPGRADER_STRUCTURE_TYPES.includes(structure.structureType)) {
       // @ts-ignore
       return structure.pos.getRangeTo(structure.room.controller) < 5
@@ -58,7 +63,6 @@ const structureUtils = {
   sourceStructures(room: Room, structureTypes = SOURCE_STRUCTURE_TYPES) {
     return room.find(FIND_MY_STRUCTURES, {
       filter: structure =>
-        // @ts-ignore
         structureTypes.includes(structure.structureType) &&
         structureUtils.isStructureNearSource(structure),
     })
@@ -79,18 +83,17 @@ const structureUtils = {
   upgraderStructures(room: Room, structureTypes = UPGRADER_STRUCTURE_TYPES) {
     return room.find(FIND_MY_STRUCTURES, {
       filter: structure =>
-        // @ts-ignore
         structureTypes.includes(structure.structureType) &&
         structureUtils.isUpgraderStructure(structure),
     })
   },
 
-  // @ts-ignore
-  full(structure) {
-    // console.log(structure)
+  full(structure: Structure) {
     if (STORE_STRUCTURE_TYPES.includes(structure.structureType)) {
+      // @ts-ignore
       return structure.store[RESOURCE_ENERGY] === structure.storeCapacity
     }
+    // @ts-ignore
     return structure.energy === structure.energyCapacity
   },
 }
