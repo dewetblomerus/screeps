@@ -1,4 +1,4 @@
-import structureUtils from './structure.utils'
+import structureUtils, { destinationContainers } from './structure.utils'
 
 type PriorityStructure = [StructureConstant, number]
 
@@ -94,13 +94,6 @@ const structuresOfType = (
       structure.structureType === structureType &&
       // @ts-ignore
       structure.energy < structure.energyCapacity,
-  })
-
-const destinationContainers = (room: Room) =>
-  room.find(FIND_STRUCTURES, {
-    filter: s =>
-      s.structureType === STRUCTURE_CONTAINER &&
-      s.pos.findInRange(FIND_SOURCES, 2).length === 0,
   })
 
 const chooseTarget = (creep: Creep, room: Room) => {

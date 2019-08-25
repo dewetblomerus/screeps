@@ -1,4 +1,7 @@
-import structureUtils, { isStructureNearSource } from './structure.utils'
+import structureUtils, {
+  isStructureNearSource,
+  destinationContainers,
+} from './structure.utils'
 
 const minEnergyToMove = 300
 
@@ -119,9 +122,7 @@ const chooseSupply = (creep: Creep) => {
   }
 
   if (structureType === STRUCTURE_CONTAINER) {
-    return creep.pos.findClosestByRange(
-      structureUtils.destinationContainers(creep.room)
-    )
+    return creep.pos.findClosestByRange(destinationContainers(creep.room))
   }
 
   return structureUtils.linkNearStorage(creep.room)

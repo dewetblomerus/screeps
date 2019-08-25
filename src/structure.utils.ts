@@ -25,15 +25,14 @@ export const isStructureNearSource = (structure: Structure): boolean => {
   return false
 }
 
-const structureUtils = {
-  destinationContainers(room: Room) {
-    return room.find(FIND_STRUCTURES, {
-      filter: s =>
-        s.structureType === STRUCTURE_CONTAINER &&
-        s.pos.findInRange(FIND_SOURCES, 2).length === 0,
-    })
-  },
+export const destinationContainers = (room: Room) =>
+  room.find(FIND_STRUCTURES, {
+    filter: s =>
+      s.structureType === STRUCTURE_CONTAINER &&
+      s.pos.findInRange(FIND_SOURCES, 2).length === 0,
+  })
 
+const structureUtils = {
   energyStructures(room: Room, minEnergy = 50) {
     return room.find(FIND_MY_STRUCTURES, {
       filter: structure =>
