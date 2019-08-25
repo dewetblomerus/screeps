@@ -1,4 +1,4 @@
-import structureUtils from './structure.utils'
+import structureUtils, { isStructureNearSource } from './structure.utils'
 
 const minEnergyToMove = 300
 
@@ -80,7 +80,7 @@ const supplyStructures = (creep: Creep) => {
       // @ts-ignore
       supplyTypes.includes(structure.structureType) &&
       containsMinEnergy(structure) &&
-      structureUtils.isStructureNearSource(structure),
+      isStructureNearSource(structure),
   })
 }
 

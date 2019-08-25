@@ -18,6 +18,13 @@ const STORE_STRUCTURE_TYPES: StructureConstant[] = [
   STRUCTURE_STORAGE,
 ]
 
+export const isStructureNearSource = (structure: Structure): boolean => {
+  if (SOURCE_STRUCTURE_TYPES.includes(structure.structureType)) {
+    return structure.pos.findInRange(FIND_SOURCES, 2).length > 0
+  }
+  return false
+}
+
 const structureUtils = {
   destinationContainers(room: Room) {
     return room.find(FIND_STRUCTURES, {
@@ -45,13 +52,6 @@ const structureUtils = {
     return structure.energy
   },
 
-  isStructureNearSource(structure: Structure) {
-    if (SOURCE_STRUCTURE_TYPES.includes(structure.structureType)) {
-      return structure.pos.findInRange(FIND_SOURCES, 2).length > 0
-    }
-    return false
-  },
-
   isUpgraderStructure(structure: Structure) {
     if (UPGRADER_STRUCTURE_TYPES.includes(structure.structureType)) {
       // @ts-ignore
@@ -64,7 +64,7 @@ const structureUtils = {
     return room.find(FIND_MY_STRUCTURES, {
       filter: structure =>
         structureTypes.includes(structure.structureType) &&
-        structureUtils.isStructureNearSource(structure),
+        isStructureNearSource(structure),
     })
   },
 
